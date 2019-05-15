@@ -19,8 +19,10 @@ description: >- # this means to ignore newlines until "baseurl:"
   This project to analyze accountability in news articles is in 
   collaboration with Red Hen Lab, Dr. Glik from the 
   UCLA school of public health, and facilitated by Google Summer of Code. 
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "AnalyzeAccountability"
+#baseurl: "AnalyzeAccountability" # the subpath of your site, e.g. /blog
+url: "https://anjapago.github.io/AnalyzeAccountability/" # the base hostname & protocol for your site, e.g. http://example.com
+#url: ""
 #twitter_username: jekyllrb
 #github_username:  jekyll
 
