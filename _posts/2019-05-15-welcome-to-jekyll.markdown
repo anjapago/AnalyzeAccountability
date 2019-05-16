@@ -3,7 +3,7 @@ layout: post
 title:  "Project Objectives"
 date:   2019-05-15 00:39:30 -0400
 categories: jekyll update
-permalink: /:categories/:year/:month/:day/:title.html
+permalink: /AnalyzeAccountability/:categories/:year/:month/:day/:title.html
 ---
 ## Objective 1: Analysis of annotations 
 The first objective is to see how well the accountability annotations correspond to features in the text, to determine if there could be any issues with the given annotations, such as human errors or bias. This will be investigated with:

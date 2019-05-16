@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-permalink: /about/
+permalink: /AnalyzeAccountability/about/
 ---
 
   The objective of this project is to automatically detect types of 
