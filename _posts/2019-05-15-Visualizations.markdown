@@ -8,26 +8,30 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 # Text Visualizations
 
-This file will display visualizations of the text based on the categories, shown as the circles on the distance plot. The word distributions on the right show the most common words in each category when $\lambda=1$, and the most specific words to the category when $\lambda = 0$.
+This file will display visualizations of the text based on the labelled categories, shown as the circles on the distance plot. This plot also shows the word distributions associated with each category. The word distributions on the right show the most common words in each category when lambda=1, and the most specific words to the category when lambda = 0.
 
+The categories are labelled on the plot as numbers, and the corresponding label titles are:
 
-```python
-import warnings
-warnings.filterwarnings('ignore')
-import pyLDAvis
-import json
-```
-
-
-```python
-with open("viz.json", 'r') as j:
-    data = json.load(j)
-
-vis_data = pyLDAvis.prepare(**data)
-pyLDAvis.display(vis_data)
-```
-
-
+	Topic 1: ACCOUNT number of excerpts: 1799
+	Topic 2: EVENT number of excerpts: 1281
+	Topic 3: GRIEF number of excerpts: 646
+	Topic 4: HERO number of excerpts: 13
+	Topic 5: INVESTIGATION number of excerpts: 301
+	Topic 6: JOURNEY number of excerpts: 224
+	Topic 7: LEGAL number of excerpts: 15
+	Topic 8: MEDIA number of excerpts: 157
+	Topic 9: MISCELLANEOUS number of excerpts: 52
+	Topic 10: MOURNING number of excerpts: 671
+	Topic 11: PERPETRATOR number of excerpts: 739
+	Topic 12: PHOTO number of excerpts: 317
+	Topic 13: POLICY number of excerpts: 816
+	Topic 14: RACECULTURE number of excerpts: 23
+	Topic 15: RESOURCES number of excerpts: 190
+	Topic 16: SAFETY number of excerpts: 168
+	Topic 17: SOCIALSUPPORT number of excerpts: 310
+	Topic 18: THREAT number of excerpts: 103
+	Topic 19: TRAUMA number of excerpts: 696
+	Topic 20: VICTIMS number of excerpts: 526
 
 
 
