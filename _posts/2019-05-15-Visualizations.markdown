@@ -8,32 +8,33 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 # Text Visualizations
 
-This file will display visualizations of the text based on the labelled categories, shown as the circles on the distance plot. This plot also shows the word distributions associated with each category. The word distributions on the right show the most common words in each category when lambda=1, and the most specific words to the category when lambda = 0.
+This file will display visualizations of the text based on the labelled categories, shown as the circles on the distance plot. This plot also shows the word distributions associated with each category. The word distributions on the right show the most common words in each category when lambda=1, and the most specific words to the category when lambda = 0, computer by the relevance metric. 
 
 The categories are labelled on the plot as numbers, and the corresponding label titles are:
 
-	Topic 1: ACCOUNT number of excerpts: 1799
-	Topic 2: EVENT number of excerpts: 1281
-	Topic 3: GRIEF number of excerpts: 646
-	Topic 4: HERO number of excerpts: 13
-	Topic 5: INVESTIGATION number of excerpts: 301
-	Topic 6: JOURNEY number of excerpts: 224
-	Topic 7: LEGAL number of excerpts: 15
-	Topic 8: MEDIA number of excerpts: 157
-	Topic 9: MISCELLANEOUS number of excerpts: 52
-	Topic 10: MOURNING number of excerpts: 671
-	Topic 11: PERPETRATOR number of excerpts: 739
-	Topic 12: PHOTO number of excerpts: 317
-	Topic 13: POLICY number of excerpts: 816
-	Topic 14: RACECULTURE number of excerpts: 23
-	Topic 15: RESOURCES number of excerpts: 190
-	Topic 16: SAFETY number of excerpts: 168
-	Topic 17: SOCIALSUPPORT number of excerpts: 310
-	Topic 18: THREAT number of excerpts: 103
-	Topic 19: TRAUMA number of excerpts: 696
-	Topic 20: VICTIMS number of excerpts: 526
+	Topic 1: HERO, number of excerpts: 13
+	Topic 2: LEGAL, number of excerpts: 15
+	Topic 3: RACECULTURE, number of excerpts: 23
+	Topic 4: MISCELLANEOUS, number of excerpts: 52
+	Topic 5: THREAT, number of excerpts: 103
+	Topic 6: MEDIA, number of excerpts: 157
+	Topic 7: SAFETY, number of excerpts: 168
+	Topic 8: RESOURCES, number of excerpts: 190
+	Topic 9: JOURNEY, number of excerpts: 224
+	Topic 10: INVESTIGATION, number of excerpts: 301
+	Topic 11: SOCIALSUPPORT, number of excerpts: 310
+	Topic 12: PHOTO, number of excerpts: 317
+	Topic 13: VICTIMS, number of excerpts: 526
+	Topic 14: GRIEF, number of excerpts: 646
+	Topic 15: MOURNING, number of excerpts: 671
+	Topic 16: TRAUMA, number of excerpts: 696
+	Topic 17: PERPETRATOR, number of excerpts: 739
+	Topic 18: POLICY, number of excerpts: 816
+	Topic 19: EVENT, number of excerpts: 1281
+	Topic 20: ACCOUNT, number of excerpts: 1799
 
 
+The size of the circles correspond to the number of excerpts for that category. Also, if hovering over a word in the chart on the right, the size of the circles will adjust proportional to count of that word in each category. 
 
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.css">
 
@@ -78,4 +79,6 @@ if(typeof(LDAvis) !== "undefined"){
 
 
 
-From these results it shows that some categories are very close together and overlapping, and some are more distinct. Some improvements could be made to the pre-processing including using n-grams and lemmas instead of stemming. 
+These results can be used to get an intuition of what the labels have captured in the data. It can give an idea how similar the topics are, by how much their circles are overlapping. It can alse give insights about wich words best categorize that topic. From these results it shows that some of the labelled categories are very close together and overlapping, and some of the smaller ones are more distinct. 
+
+This plot can also be used to visually inspect the effects of the pre-processing. It can be seen that some improvements could be made to the pre-processing including using n-grams and using lemmas instead of stemming during tokenization. 
