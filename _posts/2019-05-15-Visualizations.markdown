@@ -8,7 +8,7 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 # Text Visualizations
 
-This file will display visualizations of the text based on the labelled categories, shown as the circles on the distance plot. This plot also shows the word distributions associated with each category. The word distributions on the right show the most common words in each category when lambda=1, and the most specific words to the category when lambda = 0, computer by the relevance metric. 
+This file will display visualizations of the text based on the labelled categories, shown as the circles on the distance plot. This plot also shows the word distributions associated with each category. The word distributions on the right show the most common words in each category when lambda=1, and the most specific words to the category when lambda = 0, computed by the relevance metric. 
 
 The categories are labelled on the plot as numbers, and the corresponding label titles are:
 
@@ -34,7 +34,7 @@ The categories are labelled on the plot as numbers, and the corresponding label 
 	Topic 20: LEGAL, number of words: 1737
 
 
-The size of the circles correspond to the number of excerpts for that category. Also, if hovering over a word in the chart on the right, the size of the circles will adjust proportional to count of that word in each category. 
+The size of the circles correspond to the size of that category. Also, if hovering over a word in the chart on the right, the size of the circles will adjust proportional to count of that word in each category. Clciking on a topic will display that topi'c word distribution, and clicking away on the empty part of the distance plot will show the overall word distribution of all the documents.
 
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.css">
 
@@ -79,6 +79,6 @@ if(typeof(LDAvis) !== "undefined"){
 
 
 
-These results can be used to get an intuition of what the labels have captured in the data. It can give an idea how similar the topics are, by how much their circles are overlapping. It can alse give insights about wich words best categorize that topic. From these results it shows that some of the labelled categories are very close together and overlapping, and some of the smaller ones are more distinct. 
+These results can be used to get an intuition of what the labels have captured in the text. It can give an idea how similar the topics are, by how much their circles are overlapping. It can alse give insights about which words best categorize that topic. From these results it shows that some of the labelled categories are very close together and overlapping, and some of the smaller ones are more distinct. 
 
-This plot can also be used to visually inspect the effects of the pre-processing. It can be seen that some improvements could be made to the pre-processing including using n-grams and using lemmas instead of stemming during tokenization. 
+This plot can also be used to visually inspect the effects of the pre-processing. It can be seen that some improvements could be made to the pre-processing including using n-grams, for example grouping the words "santa" and "barbara" into a single token "santa barbara", and using lemmas instead of stemming during tokenization. Also, it can identify aditional stop words that could be removed. 
