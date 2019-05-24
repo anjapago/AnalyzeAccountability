@@ -12,26 +12,26 @@ This file will display visualizations of the text based on the labelled categori
 
 The categories are labelled on the plot as numbers, and the corresponding label titles are:
 
-	Topic 1: HERO, number of excerpts: 13
-	Topic 2: LEGAL, number of excerpts: 15
-	Topic 3: RACECULTURE, number of excerpts: 23
-	Topic 4: MISCELLANEOUS, number of excerpts: 52
-	Topic 5: THREAT, number of excerpts: 103
-	Topic 6: MEDIA, number of excerpts: 157
-	Topic 7: SAFETY, number of excerpts: 168
-	Topic 8: RESOURCES, number of excerpts: 190
-	Topic 9: JOURNEY, number of excerpts: 224
-	Topic 10: INVESTIGATION, number of excerpts: 301
-	Topic 11: SOCIALSUPPORT, number of excerpts: 310
-	Topic 12: PHOTO, number of excerpts: 317
-	Topic 13: VICTIMS, number of excerpts: 526
-	Topic 14: GRIEF, number of excerpts: 646
-	Topic 15: MOURNING, number of excerpts: 671
-	Topic 16: TRAUMA, number of excerpts: 696
-	Topic 17: PERPETRATOR, number of excerpts: 739
-	Topic 18: POLICY, number of excerpts: 816
-	Topic 19: EVENT, number of excerpts: 1281
-	Topic 20: ACCOUNT, number of excerpts: 1799
+	Topic 1: ACCOUNT, number of excerpts: 1799
+	Topic 2: EVENT, number of excerpts: 1281
+	Topic 3: POLICY, number of excerpts: 816
+	Topic 4: PERPETRATOR, number of excerpts: 739
+	Topic 5: TRAUMA, number of excerpts: 696
+	Topic 6: MOURNING, number of excerpts: 671
+	Topic 7: GRIEF, number of excerpts: 646
+	Topic 8: VICTIMS, number of excerpts: 526
+	Topic 9: PHOTO, number of excerpts: 317
+	Topic 10: SOCIALSUPPORT, number of excerpts: 310
+	Topic 11: INVESTIGATION, number of excerpts: 301
+	Topic 12: JOURNEY, number of excerpts: 224
+	Topic 13: RESOURCES, number of excerpts: 190
+	Topic 14: SAFETY, number of excerpts: 168
+	Topic 15: MEDIA, number of excerpts: 157
+	Topic 16: THREAT, number of excerpts: 103
+	Topic 17: MISCELLANEOUS, number of excerpts: 52
+	Topic 18: RACECULTURE, number of excerpts: 23
+	Topic 19: LEGAL, number of excerpts: 15
+	Topic 20: HERO, number of excerpts: 13
 
 
 The size of the circles correspond to the number of excerpts for that category. Also, if hovering over a word in the chart on the right, the size of the circles will adjust proportional to count of that word in each category. 
