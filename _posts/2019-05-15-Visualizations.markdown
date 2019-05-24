@@ -12,26 +12,26 @@ This file will display visualizations of the text based on the labelled categori
 
 The categories are labelled on the plot as numbers, and the corresponding label titles are:
 
-	Topic 1: ACCOUNT, number of excerpts: 1799
-	Topic 2: EVENT, number of excerpts: 1281
-	Topic 3: POLICY, number of excerpts: 816
-	Topic 4: PERPETRATOR, number of excerpts: 739
-	Topic 5: TRAUMA, number of excerpts: 696
-	Topic 6: MOURNING, number of excerpts: 671
-	Topic 7: GRIEF, number of excerpts: 646
-	Topic 8: VICTIMS, number of excerpts: 526
-	Topic 9: PHOTO, number of excerpts: 317
-	Topic 10: SOCIALSUPPORT, number of excerpts: 310
-	Topic 11: INVESTIGATION, number of excerpts: 301
-	Topic 12: JOURNEY, number of excerpts: 224
-	Topic 13: RESOURCES, number of excerpts: 190
-	Topic 14: SAFETY, number of excerpts: 168
-	Topic 15: MEDIA, number of excerpts: 157
-	Topic 16: THREAT, number of excerpts: 103
-	Topic 17: MISCELLANEOUS, number of excerpts: 52
-	Topic 18: RACECULTURE, number of excerpts: 23
-	Topic 19: LEGAL, number of excerpts: 15
-	Topic 20: HERO, number of excerpts: 13
+	Topic 1: ACCOUNT, number of words: 176621
+	Topic 2: POLICY, number of words: 91678
+	Topic 3: EVENT, number of words: 98468
+	Topic 4: VICTIMS, number of words: 56061
+	Topic 5: PERPETRATOR, number of words: 77495
+	Topic 6: MOURNING, number of words: 48223
+	Topic 7: TRAUMA, number of words: 57280
+	Topic 8: GRIEF, number of words: 40600
+	Topic 9: PHOTO, number of words: 17944
+	Topic 10: INVESTIGATION, number of words: 20004
+	Topic 11: SOCIALSUPPORT, number of words: 21636
+	Topic 12: JOURNEY, number of words: 16369
+	Topic 13: MEDIA, number of words: 12786
+	Topic 14: RESOURCES, number of words: 12288
+	Topic 15: SAFETY, number of words: 11732
+	Topic 16: THREAT, number of words: 9303
+	Topic 17: MISCELLANEOUS, number of words: 4665
+	Topic 18: HERO, number of words: 1511
+	Topic 19: RACECULTURE, number of words: 1423
+	Topic 20: LEGAL, number of words: 1737
 
 
 The size of the circles correspond to the number of excerpts for that category. Also, if hovering over a word in the chart on the right, the size of the circles will adjust proportional to count of that word in each category. 
