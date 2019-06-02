@@ -41,7 +41,7 @@ docs_train, docs_test, y_train, y_test = train_test_split(stem_count_X, list(dat
                                                           test_size=0.2, random_state=0) 
 
 tpot = TPOTClassifier(generations=100, population_size=100, verbosity=2, config_dict='TPOT sparse',
-					 max_time_mins=1200, max_eval_time_mins=3, scoring = 'f1_macro',
+					 max_time_mins=3000, max_eval_time_mins=5, scoring = 'f1_macro', warm_start = True,
                      n_jobs = 1, periodic_checkpoint_folder='tpot_checkpoints', cv = 5, memory = 'auto')
 tpot.fit(docs_train, y_train)
 
