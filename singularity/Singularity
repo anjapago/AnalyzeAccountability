@@ -5,16 +5,12 @@ From: singularityhub/ubuntu
     exec git clone https://github.com/anjapago/AnalyzeAccountability.git
     exec python3 AnalyzeAccountability/hello.py
 
-%labels
-   AUTHOR ajpagotto@gmail.com
-
 %post
-    apt-get update && apt-get -y install python3 git python-pip wget
+    apt-get update && apt-get -y install python3 git python3-pip wget
     apt-get install -y --force-yes python-dev python-numpy python-matplotlib
-    apt-get install -y --force-yes python-setuptools
     pip install --upgrade pip
-    pip install pandas
     pip install numpy
+    pip install pandas
     pip install scipy
     pip install scikit-learn
     pip install nltk
