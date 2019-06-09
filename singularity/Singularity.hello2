@@ -15,5 +15,5 @@ From: continuumio/miniconda3
   export PATH
 
 %runscript
-    exec git clone https://github.com/anjapago/AnalyzeAccountability.git
-    exec python3 AnalyzeAccountability/hello1.py
+    exec git clone https://github.com/anjapago/AnalyzeAccountability.git \
+    && python3 AnalyzeAccountability/hello1.py
