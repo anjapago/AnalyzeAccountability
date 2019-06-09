@@ -7,9 +7,9 @@ From: singularityhub/ubuntu
 
 %post
     apt-get update && apt-get -y install python3 git python3-pip wget
-    pip install --upgrade pip
-    pip install numpy
-    pip install pandas
-    pip install scipy
-    pip install scikit-learn
-    pip install nltk
+    pip3 install --upgrade pip3
+    pip3 install numpy
+    pip3 install pandas
+    pip3 install scipy
+    pip3 install scikit-learn
+    pip3 install nltk
