@@ -1,0 +1,19 @@
+
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%post
+    apt-get update && apt-get -y install git wget
+    /opt/conda/bin/conda install numpy matplotlib scikit-learn
+    /opt/conda/bin/pip install pandas
+    /opt/conda/bin/pip install scipy
+    /opt/conda/bin/pip install scikit-learn
+    /opt/conda/bin/pip install nltk
+
+%environment
+  PATH=/opt/conda/bin:$PATH
+  export PATH
+
+%runscript
+    exec git clone https://github.com/anjapago/AnalyzeAccountability.git
+    exec python3 AnalyzeAccountability/hello1.py
