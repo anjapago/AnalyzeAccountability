@@ -13,6 +13,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import svm
 
 nltk.download('stopwords')
+nltk.download('punkt')
 
 file_name = "Isla Vista - All Excerpts - 1_2_2019.xlsx"
 data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
