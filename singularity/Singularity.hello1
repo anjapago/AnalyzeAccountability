@@ -1,9 +1,9 @@
-Bootstrap: shub
-From: singularityhub/ubuntu
+Bootstrap: docker
+From: fastgenomics/sklearn:0.19.1-p36-v5
 
 %runscript
     exec git clone https://github.com/anjapago/AnalyzeAccountability.git
     exec python3 AnalyzeAccountability/hello1.py
 
 %post
-    apt-get update && apt-get -y install python3 git python3-pip wget
+    apt-get update && apt-get -y install git wget
