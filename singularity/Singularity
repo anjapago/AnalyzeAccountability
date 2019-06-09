@@ -8,6 +8,7 @@ From: continuumio/miniconda3
     /opt/conda/bin/pip install scipy
     /opt/conda/bin/pip install scikit-learn
     /opt/conda/bin/pip install nltk
+    /opt/conda/bin/pip install xlrd
 
 %environment
   PATH=/opt/conda/bin:$PATH
