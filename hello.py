@@ -12,4 +12,5 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import svm
 
 print("Hello")
+nltk.download('stopwords')
 print(list(set(stopwords.words('english')))[0:10])
