@@ -6,24 +6,37 @@ from nltk.corpus import wordnet, stopwords
 from nltk.stem import snowball, WordNetLemmatizer
 from nltk.tokenize import sent_tokenize, word_tokenize
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+import matplotlib.pyplot as plt
 from sklearn import svm
 
-nltk.download('stopwords')
-nltk.download('punkt')
+#nltk.download('stopwords')
+#nltk.download('punkt')
 
-file_name = "Isla Vista - All Excerpts - 1_2_2019.xlsx"
-data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
-print(data.shape)
-data = data.dropna(axis=0)
-print(data.shape)
-print(data.columns)
+def plot_coefficients(classifier_coefs, feature_names, top_features=20, show_neg = True):
+    #coef = classifier.coef_.ravel()
+    coef = classifier_coefs.ravel()
+    top_positive_coefficients = np.argsort(coef)[-top_features:]
+    top_negative_coefficients = np.argsort(coef)[:top_features]
+    # create plot
+    plt.figure(figsize=(15, 5))
+    if show_neg:
+        top_coefficients = np.hstack([top_negative_coefficients, top_positive_coefficients])
+        colors = ['red' if c < 0 else 'blue' for c in coef[top_coefficients]]
+        plt.bar(np.arange(2 * top_features), coef[top_coefficients], color=colors)
+        feature_names = np.array(feature_names)
+        plt.xticks(np.arange(1, 1 + 2 * top_features), feature_names[top_coefficients], rotation=60, ha='right')
+    else:
+        top_coefficients = top_positive_coefficients
+        plt.bar(np.arange(top_features), coef[top_coefficients])
+        feature_names = np.array(feature_names)
+        plt.xticks(np.arange(top_features), feature_names[top_coefficients], rotation=60, ha='right')
 
+    plt.show()
 
-excerpts = list(data['Excerpt'])
 def stem_tokenizer(doc):
     stop_words = set(stopwords.words('english'))
     tokens = word_tokenize(doc)
@@ -31,77 +44,90 @@ def stem_tokenizer(doc):
     stemmed_tokens = [stemmer.stem(word) for word in tokens]
     list_tokens = [tok.lower() for tok in stemmed_tokens if tok.isalpha()]
     return(' '.join(list_tokens))
-print("original: "+str(excerpts[3]))
-print(stem_tokenizer(excerpts[3]))
+
+def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx",
+                                        "Marysville - All Excerpts - Final - 1_2_2019.xlsx",
+                                        "Newtown - All Excerpts - 1-2-2019.xlsx"]):
+
+    # file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx",
+    #             "Marysville - All Excerpts - Final - 1_2_2019.xlsx",
+    #             "Newtown - All Excerpts - 1-2-2019.xlsx"]
+
+    excerpts = []
+    account_labels = []
+    for file_name in file_names:
+        data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
+        data = data.dropna(axis=0)
+        ex_col = list(data.columns)[1]
+        #print("Excerpt column: "+str(ex_col))
+        excerpts.extend(list(data[ex_col]))
+        account_labels.extend(list(data['ACCOUNT']))
 
 
-# stem + count
-docs = [stem_tokenizer(doc) for doc in excerpts]
-vectorizer = CountVectorizer(max_features=1500, min_df=5, max_df=0.7, stop_words=stopwords.words('english'))
-stem_count_X = vectorizer.fit_transform(docs).toarray()
+    # stem + count
+    docs = [stem_tokenizer(doc) for doc in excerpts]
+    count_vectorizer = CountVectorizer(max_features=1500, min_df=5, max_df=0.7,
+                                        stop_words=stopwords.words('english'))
+    stem_count_X = count_vectorizer.fit_transform(docs).toarray()
 
+    # stem + tfidf
+    docs = [stem_tokenizer(doc) for doc in excerpts]
+    tfidf_vectorizer = TfidfVectorizer(max_features=1500, min_df=5, max_df=0.7,
+                                        stop_words=stopwords.words('english'))
+    stem_tfidf_X = tfidf_vectorizer.fit_transform(docs).toarray()
 
-# stem + tfidf
-docs = [stem_tokenizer(doc) for doc in excerpts]
-vectorizer = TfidfVectorizer(max_features=1500, min_df=5, max_df=0.7, stop_words=stopwords.words('english'))
-stem_tfidf_X = vectorizer.fit_transform(docs).toarray()
+    doc_vectors = {'vectorizers':[count_vectorizer, tfidf_vectorizer],
+                    'vectors':[stem_count_X, stem_tfidf_X],
+                    'type':["count vector", "tfidf vector"]}
 
-docs_train, docs_test, y_train, y_test = train_test_split(stem_count_X, list(data['ACCOUNT']),
-                                                          test_size=0.2, random_state=0)
-#Create a svm Classifier
-clf = svm.SVC(kernel='linear') # Linear Kernel
-#Train the model using the training sets
-clf.fit(docs_train, y_train)
+    #Create a svm Classifier
+    clf = svm.SVC(kernel='linear') # Linear Kernel
+    logreg = LogisticRegression(solver='lbfgs', max_iter=1000)
+    rf = RandomForestClassifier(n_estimators=1000, random_state=0)
 
-y_pred = clf.predict(docs_test)
-print("count vector SVM results")
-print(confusion_matrix(y_test,y_pred))
-print(classification_report(y_test,y_pred))
-print(accuracy_score(y_test, y_pred))
+    classifiers = [clf, logreg, rf]
+    classifier_f1s = []
+    classifier_best_vecs = []
+    classifier_best_vectorizer = []
 
-docs_train, docs_test, y_train, y_test = train_test_split(stem_tfidf_X, list(data['ACCOUNT']),
-                                                          test_size=0.2, random_state=0)
-#Create a svm Classifier
-clf = svm.SVC(kernel='linear') # Linear Kernel
-#Train the model using the training sets
-clf.fit(docs_train, y_train)
+    for classi in classifiers:
+        f1 = []
+        y_preds = []
+        for doc_vector in doc_vectors['vectors']:
+            docs_train, docs_test, y_train, y_test \
+            = train_test_split(pd.DataFrame(doc_vector), account_labels,
+                                test_size=0.2, random_state=0)
 
-y_pred = clf.predict(docs_test)
-print("tfidf vector SVM results")
-print(confusion_matrix(y_test,y_pred))
-print(classification_report(y_test,y_pred))
-print(accuracy_score(y_test, y_pred))
+            classi.fit(docs_train, y_train)
+            y_pred = classi.predict(docs_test)
+            f1.append(f1_score(y_test,y_pred))
+            y_preds.append(y_pred)
 
-docs_train, docs_test, y_train, y_test = train_test_split(stem_count_X, list(data['ACCOUNT']),
-                                                          test_size=0.2, random_state=0)
+        best_vec = np.argmax(f1)
+        print(doc_vectors['type'][best_vec]+" "+str(type(classi).__name__)+" results:")
+        print(confusion_matrix(y_test,y_preds[best_vec]))
+        print(classification_report(y_test,y_preds[best_vec]))
+        classifier_f1s.append(max(f1))
+        classifier_best_vecs.append(doc_vectors['vectors'][best_vec])
+        classifier_best_vectorizer.append(doc_vectors['vectorizers'][best_vec])
 
-logreg = LogisticRegression(solver='lbfgs', max_iter=1000)
-logreg.fit(docs_train, y_train)
+    best_classi_id = np.argmax(classifier_f1s)
+    best_classi = classifiers[best_classi_id]
+    best_vecs = classifier_best_vecs[best_classi_id]
+    best_vectorizer = classifier_best_vectorizer[best_classi_id]
 
-y_pred = logreg.predict(docs_test)
-print("count vector logistic regression results")
-print(confusion_matrix(y_test,y_pred))
-print(classification_report(y_test,y_pred))
-print(accuracy_score(y_test, y_pred))
+    docs_train, docs_test, y_train, y_test \
+    = train_test_split(pd.DataFrame(best_vecs), account_labels,
+                        test_size=0.2, random_state=0)
 
+    best_classi.fit(docs_train, y_train)
+    y_pred = best_classi.predict(docs_test)
+    results = {"predicted":y_pred, "actual":y_test,
+                "test_vectors":docs_test,
+                'test_excerpts': [excerpts[idx] for idx in list(docs_test.index)],
+                "classifier":best_classi,
+                "vectorizer": best_vectorizer, "vectors":best_vecs}
+    return results
 
-docs_train, docs_test, y_train, y_test = train_test_split(stem_count_X, list(data['ACCOUNT']), #test_size=0.2,
-                                                         random_state=0)
-classifier = RandomForestClassifier(n_estimators=1000, random_state=0)
-classifier.fit(docs_train, y_train)
-
-
-y_pred = classifier.predict(docs_test)
-print("count vector random forest results")
-print(confusion_matrix(y_test,y_pred))
-print(classification_report(y_test,y_pred))
-print(accuracy_score(y_test, y_pred))
-
-print(len(classifier.feature_importances_) == len(vectorizer.get_feature_names()))
-top_feats = np.argsort(classifier.feature_importances_)[-10:]
-feat_names = [vectorizer.get_feature_names()[feat] for feat in top_feats]
-print(feat_names)
-
-test_doc = np.zeros(len(docs_test[1]))
-test_doc[top_feats[6]] = 1
-print("class: "+str(classifier.predict([test_doc])))
+if __name__ == '__main__':
+    results = find_best_classifier()
