@@ -1,15 +1,17 @@
-Bootstrap: shub
-From: singularityhub/ubuntu
-
-%runscript
-    exec git clone https://github.com/anjapago/AnalyzeAccountability.git
-    exec python3 AnalyzeAccountability/hello.py
+Bootstrap: docker
+From: continuumio/miniconda3
 
 %post
-    apt-get update && apt-get -y install python3 git python3-pip wget
-    pip3 install --upgrade pip3
-    pip3 install numpy
-    pip3 install pandas
-    pip3 install scipy
-    pip3 install scikit-learn
-    pip3 install nltk
+    apt-get update && apt-get -y install git wget
+    /opt/conda/bin/conda install numpy matplotlib scikit-learn
+    /opt/conda/bin/pip install pandas
+    /opt/conda/bin/pip install scipy
+    /opt/conda/bin/pip install scikit-learn
+    /opt/conda/bin/pip install nltk
+
+%environment
+  PATH=/opt/conda/bin:$PATH
+  export PATH
+
+%runscript
+    exec python AnalyzeAccountability/simple_classifier.py
