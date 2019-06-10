@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Binary Classifier"
-date:   2019-06-06 00:39:30 -0400
+date:   2019-06-05 00:39:30 -0400
 categories: update
 permalink: /:categories/:year/:month/:day/:title.html
 ---
