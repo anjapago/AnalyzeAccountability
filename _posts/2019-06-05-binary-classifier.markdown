@@ -75,7 +75,7 @@ of decision trees. This model creates a more complicated boundary separation,
 but the sklearn implementation can still track the importance of each feature
 (word) in making the decision about which class a document belongs to.
 
-## Experiment Set Up
+## Experiment
 The documents were first processed by tokenization, stemming, converting
 all words to lower case, and removing standard "stop words" (stop words are
 words that are very common and prevalent across all english documents, e.g.
@@ -107,7 +107,7 @@ The results were:
        macro avg       0.84      0.80      0.82      4375
     weighted avg       0.91      0.92      0.92      4375
 
-### Isla Isla Vista
+### Isla Vista
 
 The same procedure was repeated on Isla Vista data alone. The results were
 better than the full dataset, and the best model was random forest with the
@@ -136,7 +136,8 @@ to the number of non-accountability excerpts that were labelled as non-accountab
 (true negative), and the 293 is the number of accountability documents labelled
 as accountability (true positive).
 
-### Most Important features
+
+### Most Important Features
 
 The most important features for the svm on the full data set is shown in the
 figure below. The positive red bars show with words are most influential to
@@ -144,3 +145,86 @@ result in a classification as accountability, and the negative blue bars most
 influential to classify as non accountability.
 
 ![svm](/AnalyzeAccountability/assets/output_5_0.png)
+
+It is nice to observe that the word "blame" is the highest word contributing to
+classification as accountability.
+
+### Error Analysis
+
+We can inspect some examples of where the classifier is going wrong, by looking
+at some examples of where it guess the document was about accountability when
+actually it was not (false positive), and also where the model predicting a
+document to not be accountability when actually it was (false negative).
+
+#### False Positive examples
+
+The following are some excerpts that were incorrectly predicted as accountability.
+The terms that may have mislead the classifier to classify these excerpts as
+accountability are indicated in blue (corresponding to the feature importance plot).
+
+*"Many of the students at UCSB* <span style="color:blue">*blame*</span> *the media, insisting the nonstop coverage
+rewards the murderer in death with the attention and “fame” he sought in life."*
+
+This example contains the word "blame" which is a strong indicator of the accountability
+label. Reading this excerpt, it does seem like it could be related to accountability.
+This example shows that this is a complex task, even to human judgement.
+
+*"The Washington Post offered an excellent example of this over the weekend,
+when Ann* <span style="color:blue">*Hornaday*</span> *argued that the real culprit for Eliot Rodger's murder
+spree was ... Judd Apatow, James Bond and a bad Robert Downey flick that
+probably only* <span style="color:blue">*Hornaday*</span> *remembers."*
+
+This example is a bit less clear than the previous, and the word that probably lead to
+mis-classification as accountability was "Hornaday". This example does seems somewhat
+related to accountability well, mentioning that the real culprit for the crime is movies
+that portray guns in positive way.
+
+*"I spent a lot of last weekend* <span style="color:blue">*fighting*</span> *tears as I contemplated this most profound of questions."*
+
+This example was likely mis-classified as due to the presence of the word "fight".
+This example seems to be very unrelated to accountability, and this demonstrates
+the limitations of the bag of words representation. It is likely that this phrase
+could not be classified well with any complex classifier with more complex decision
+boundaries, without first improving the input representation of the text to
+capture more meaning than is preserved with the simple bag of words method.
+
+#### False Negative examples
+
+The following are some excerpts that were incorrectly not predicted as accountability.
+The words with a strong weight towards non-accountability are indicated in red.
+
+*"His mother knew he was a danger to himself and others and asked the* <span style="color:red">*local*</span> *cops to pay him a visit. The police did go to the kids apartment, but saw no reason to lock him up."*
+
+This example seems a bit questionable how it relates to accountability, and so
+this is another example of where a non-expert may have just as much trouble
+identifying accountability as this algorithm does. It seems it does relate somewhat
+to blaming the police, though once again this will be tricky to capture this
+only based on the words present in the bag of words representation.
+
+*"The ban, which expired in 2004, would certainly have made a difference in the
+number of children who* <span style="color:red">*survived*</span> *the Newtown shooting.
+ The shooter could not have shot as many, as quickly, as he did."*
+
+This excerpt seems to more clearly related to accountability, and was likely missed by
+the classifier due to the presence of the word "survive", which is in general a
+more positive word and likely used less often when talking about accountability
+for the crime of the shooting.
+
+*"The next time you want to call a woman a derogatory term because she doesn't
+show any interest in you, take a step back and* <span style="color:red">*remember*</span> *thats
+the kind of thinking that caused Rodger to go off on his tantrums."*  
+
+This example does seem to pretty clearly state "the kind of thinking that caused ..."
+and so it seems the algorithm could be improved by paying more attention to the
+mention of the word caused, and also by capturing more meaning in the structure
+of the sentence when talking about causality.
+
+## Conclusions
+
+The main conclusions from these results so far, is that the choice of classifier
+seemed to make minor impact on the results, with the f1 scores across all results
+varying by only 0.02 (full results shown in the jupyter notebook on github).
+
+Based on assessment of errors, it seems there is much improvement to be gained
+by improving the text representation to include features that capture more meaning
+than can be captured with individual words in the bag of words model.
