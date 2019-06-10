@@ -13,7 +13,7 @@ were Isla Vista, Marysville and Newtown.
 The data sets were analyzed with a binary classification task, to determine
 how well excerpts discussing accountability can be identified. This post will
 explain the results of some simple baseline classifiers.
-The data sets have a main label of accontability associated with some excerpts,
+The data sets have a main label of accountability associated with some excerpts,
 and also has subtypes of accountability. The accountability sub-types will be
 discussed in future analyses.
 
@@ -90,7 +90,8 @@ the best results were also saved.
 ### Full Data
 
 The results from all six models were very similar, but the results from
-support vector machine using the count vectors was the best. The results were:
+support vector machine (svm) using the count vectors was the best.
+The results were:
 
     Confusion matrix:
     [[3627  143]
@@ -134,3 +135,12 @@ accountability than documents that were not labelled. The number 1224 correspond
 to the number of non-accountability excerpts that were labelled as non-accountability
 (true negative), and the 293 is the number of accountability documents labelled
 as accountability (true positive).
+
+### Most Important features
+
+The most important features for the svm on the full data set is shown in the
+figure below. The positive red bars show with words are most influential to
+result in a classification as accountability, and the negative blue bars most
+influential to classify as non accountability.
+
+![svm](/AnalyzeAccountability/assets/output_5_0.png)
