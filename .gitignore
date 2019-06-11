@@ -1,4 +1,8 @@
 .DS_Store
+tpot_checkpoints/
+
+tpot_checkpoints2/
+*.xlsx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
