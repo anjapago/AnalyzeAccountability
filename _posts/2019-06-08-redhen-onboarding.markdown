@@ -59,6 +59,7 @@ and what to put as "password 2" in logging in to the vpn. Hopefully this summary
 will fill in the blanks for some future students.
 
 More information on this procedure can be found on the RedHen website:
-[HPC orientation](https://sites.google.com/case.edu/techne-public-site/cwru-hpc-orientation)
-[RedHen guidelines](https://sites.google.com/site/distributedlittleredhen/home/what-kind-of-red-hen-are-you/red-hen-developers)
-[RedHen Singularity guide](https://sites.google.com/site/distributedlittleredhen/home/tutorials-and-educational-resources/using-singularity-to-create-portable-applications)
+
+- [HPC orientation](https://sites.google.com/case.edu/techne-public-site/cwru-hpc-orientation)
+- [RedHen guidelines](https://sites.google.com/site/distributedlittleredhen/home/what-kind-of-red-hen-are-you/red-hen-developers)
+- [RedHen Singularity guide](https://sites.google.com/site/distributedlittleredhen/home/tutorials-and-educational-resources/using-singularity-to-create-portable-applications)
