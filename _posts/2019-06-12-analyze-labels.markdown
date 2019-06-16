@@ -8,6 +8,7 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 This post will give an analysis of the labels accountability labels on the
 excerpts from three news shootings datasets: Isla Vista, Marysville and Newton.
+The code that produced these results can be found in this [jupyter notebook](https://github.com/anjapago/AnalyzeAccountability/blob/master/Analysis%20of%20Accountability%20Labels.ipynb).
 
 ## Number of Excerpts
 
@@ -126,7 +127,6 @@ is:
     Retrospect always seems to provide tragic clues that might have prevented a
     school shooting. Bullying. Trouble at home. An unusual fascination with guns
      or violent video games. More than ones share of typical teen angst.
-
     None of that appears to have been the case in Marysville, Wash., Friday
     morning when 14 year-old high school freshman Jaylen Fryberg walked into the
      cafeteria at Marysville-Pilchuck High School and without a word shot five
@@ -178,7 +178,7 @@ in 204 excerpts, it might be possible to just create a new label called
 enable the use of multiclass classification approaches, instead of being
 restricted to multi-label classification.
 
-## Documents with no sub-type
+## Documents with No Accountability Sub-type
 
 Another observation was made during this analysis, that some excerpts have the
 label of 'ACCOUNT' but was not assigned a sub-type of accountability label.
