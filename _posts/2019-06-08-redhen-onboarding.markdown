@@ -39,7 +39,7 @@ RedHen. In order to get access to this, several steps were required.
 4. Ssh into the HPC
 
     In the terminal, ssh <caseID>@rider.case.edu, where caseID is the abc123 CWRU
-    login. More guidelines can be [here](https://sites.google.com/a/case.edu/hpcc/).
+    login. More guidelines can be found [here](https://sites.google.com/a/case.edu/hpcc/).
     Once in the HPC, the home directory will be /home/abc123, and the path
     where you will have room to store data will be /mnt/rds/redhen/gallina/home/abc123.
     Next, follow steps to set up ssh keys, as will be explained in an email from RedHen.
@@ -50,7 +50,7 @@ RedHen. In order to get access to this, several steps were required.
     by pulling from RedHen's singularity hub, and running the container:
 
 
-    singularity pull --name deepspeech-temp.img shub://RedHenLab/singularity_containers:deepspeech2
+        singularity pull --name deepspeech-temp.img shub://RedHenLab/singularity_containers:deepspeech2
 
 
 ## Summary
