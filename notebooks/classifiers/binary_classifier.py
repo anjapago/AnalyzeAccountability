@@ -45,6 +45,28 @@ def stem_tokenizer(doc):
     list_tokens = [tok.lower() for tok in stemmed_tokens if tok.isalpha()]
     return(' '.join(list_tokens))
 
+def load_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
+                                        "data/Marysville - All Excerpts - Final - 1_2_2019.xlsx",
+                                        "data/Newtown - All Excerpts - 1-2-2019.xlsx"]):
+
+    
+    excerpts = []
+    account_labels = []
+    original_file = []
+    docid = []
+    for file_name in file_names:
+        data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
+        data = data.dropna(axis=0)
+        ex_col = list(data.columns)[1]
+        #print("Excerpt column: "+str(ex_col))
+        excerpts.extend(list(data[ex_col]))
+        account_labels.extend(list(data['ACCOUNT']))
+        original_file.extend([file_name]*len(data[ex_col]))
+        docid.extend(list(data['StoryID']))
+    
+    output_data = {'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels}
+    return pd.DataFrame(output_data)
+
 def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx",
                                         "Marysville - All Excerpts - Final - 1_2_2019.xlsx",
                                         "Newtown - All Excerpts - 1-2-2019.xlsx"]):
