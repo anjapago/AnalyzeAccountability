@@ -7,214 +7,38 @@ permalink: /:categories/:year/:month/:day/:title.html
 ---
 
 
-This notebook will analyze how many sentences are in each excerpt, and transform the labelled excerpts into a dataset of labelled sentences.
+This post will discuss the options for using the given datasets to train a sentence classifier. Next, this post will also analyze how many sentences are in each excerpt, and transform the labelled excerpts into a dataset of labelled sentences.
 
-## Import Data and Libraries
+## Sentence Classifier Objectives
 
+After the last meeting with the researchers, it was discussed that it would be preferable to have a classifier that can identify sentences within a document that are discussing accountability. The simplest approach to take for this would be to have a classifier that can operate sentence by sentence and output the classification of accountability or not. Note the alternative would be to identify spans within a document, but given the dataset as is, this seems like a less likely approach to achieve a good performance. So, the first approach that will be tried, is to train a sentence based classifier from the given excerpts.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+There is some preliminary analysis of the given dataset, analysis the words present and the class labels, see the previous posts:
 
-from itertools import compress
-from classifiers.binary_classifier import *
-from nltk import sent_tokenize
-```
+* [Visualizations](https://anjapago.github.io/AnalyzeAccountability/update/2019/05/21/Visualizations.html)
+* [Analysis of Accountability Labels](https://anjapago.github.io/AnalyzeAccountability/update/2019/06/12/analyze-labels.html)
 
-
-```python
-data_df = load_data()
-```
-
-
-```python
-data_df.head()
-```
+However, the length of the excerpts of the datasets has not yet been analyzed. In the following sections of this post, first an analysis of the existing excerpts will be shown, and then the implications with regards to classifying as a sentence classifier will be discussed. The jupyter notebook that was used to produce the following results is also posted online in the [github](https://github.com/anjapago/AnalyzeAccountability/blob/master/notebooks/Analysis%20of%20Excerpt%20Lengths.ipynb).
 
 
 
-
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ACCOUNT</th>
-      <th>Excerpts</th>
-      <th>StoryID</th>
-      <th>file</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>Are guns the problem, video\ngames, the increa...</td>
-      <td>NI2599</td>
-      <td>data/Isla Vista - All Excerpts - 1_2_2019.xlsx</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0</td>
-      <td>May 23, 2014, in Isla Vista, California. 22-ye...</td>
-      <td>NI2599</td>
-      <td>data/Isla Vista - All Excerpts - 1_2_2019.xlsx</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0</td>
-      <td>A 22-year-old student last Friday killed six p...</td>
-      <td>NI2951</td>
-      <td>data/Isla Vista - All Excerpts - 1_2_2019.xlsx</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1</td>
-      <td>A 22-year-old student last Friday killed six p...</td>
-      <td>NI2951</td>
-      <td>data/Isla Vista - All Excerpts - 1_2_2019.xlsx</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1</td>
-      <td>Elliot Rodger was not a typical man � few of u...</td>
-      <td>NI2951</td>
-      <td>data/Isla Vista - All Excerpts - 1_2_2019.xlsx</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-## Process Data Into Sentences
-
-
-```python
-sentences = []
-account_labels = []
-original_file = []
-docid = []
-excerpt_lengths = []
-excerpt_len_sent_df = []
-
-for index, row in data_df.iterrows():
-    excerpt = row['Excerpts']
-    excerpt_sentences = sent_tokenize(excerpt)
-    labels = [row['ACCOUNT']]*len(excerpt_sentences) # add same label for each sentence
-    StoryIDs = [row['StoryID']]*len(excerpt_sentences) # add same label for each sentence
-    files = [row['file']]*len(excerpt_sentences) # add same label for each sentence
-    excerpt_lengths.append(len(excerpt_sentences))
-    excerpt_len_sent_df.extend([len(excerpt_sentences)]*len(excerpt_sentences))
-
-    sentences.extend(excerpt_sentences)
-
-    account_labels.extend(labels)
-    original_file.extend(files)
-    docid.extend(StoryIDs)
-    if index%1000 ==0:
-        print("Index: "+str(index))
-
-sentences_dict = {'file':original_file, 'StoryID': docid,
-                  'Sentences': sentences, 'ACCOUNT': account_labels,
-                 'excerpt_length':excerpt_len_sent_df}
-
-sentences_df = pd.DataFrame(sentences_dict)
-```
-
-    Index: 0
-    Index: 1000
-    Index: 2000
-    Index: 3000
-    Index: 4000
-    Index: 5000
-    Index: 6000
-    Index: 7000
-    Index: 8000
-    Index: 9000
-    Index: 10000
-    Index: 11000
-    Index: 12000
-    Index: 13000
-    Index: 14000
-    Index: 15000
-    Index: 16000
-    Index: 17000
-    Index: 18000
-    Index: 19000
-    Index: 20000
-    Index: 21000
-
-
-
-```python
-# save the sentences data frame to csv for further use
-sentences_df.to_csv("data/sentences_df.csv")
-```
-
-## Analyze Lengths of Sentences
+## Analysis of Excerpt Lengths
 
 ### Overall Excerpt Length Distribution
 
+The overall distribution of number of sentences for each excerpt is shown in the histogram below. The majority of excerpts have a length of less than three sentences, and the most frequently occurring length is 1 sentence. This is good news, since there seems be already a sufficient amount of training data as excerpts that are a single sentence. Note the longest excerpt is quite long, consisting of 60 sentences.
 
-```python
-plt.hist(excerpt_lengths, bins=60)
-plt.title("Histogram of Number of Sentences")
-plt.xlabel("Number of Sentences in Excerpt")
-plt.ylabel("Number of Excerpts")
-plt.savefig('sentence_counts.png')
-plt.show()
-```
-
-
-![png](output_8_0.png)
+![png](/AnalyzeAccountability/assets/output_8_0.png)
 
 
 
-```python
-data_df['excerpt_lengths']=excerpt_lengths
-```
+### Excerpt Length Distribution by File
 
+The analysis can be repeated on each file individually, to make sure that none of the files have particularly long excerpts, that would make it more difficult to train a classifier on all three files. Looking at these histograms, a similar pattern appears for all datasets, indicating that they all have a reasonably large proportion of single sentence excerpts and excerpts with less than 5 sentences.
 
-```python
-fig = plt.figure(figsize = (15,10))
-ax = fig.gca()
-data_df['excerpt_lengths'].hist(by=data_df['file'], bins = 60, ax=ax)
-plt.show()
-```
+![png](/AnalyzeAccountability/assets/output_10_1.png)
 
-    /anaconda3/lib/python3.6/site-packages/pandas/plotting/_core.py:2214: UserWarning: To output multiple subplots, the figure containing the passed axes is being cleared
-      ylabelsize=ylabelsize, yrot=yrot, **kwds)
-
-
-
-![png](output_10_1.png)
-
-
-
-```python
-sentence_counts_df = pd.DataFrame(data_df.excerpt_lengths.value_counts())
-sentence_counts_df.columns = ['Number of Excerpts']
-sentence_counts_df.index.name = 'Number of Sentences in Excerpt'
-sentence_counts_df.sort_index()
-```
-
-
-
-
+#### Most Frequently Occurring Excerpt Lengths
 <div>
 <style>
     .dataframe thead tr:only-child th {
@@ -281,82 +105,39 @@ sentence_counts_df.sort_index()
       <th>10</th>
       <td>286</td>
     </tr>
-    <tr>
-      <th>11</th>
-      <td>231</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>146</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>125</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>125</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>73</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>60</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>69</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>26</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>19</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>14</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>17</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>8</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>6</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>5</td>
-    </tr>
+    </tbody>
+  </table>
+  </div>
+
+
+  #### Least Frequently Occurring Excerpt Lengths
+
+  <div>
+  <style>
+      .dataframe thead tr:only-child th {
+          text-align: right;
+      }
+
+      .dataframe thead th {
+          text-align: left;
+      }
+
+      .dataframe tbody tr th {
+          vertical-align: top;
+      }
+  </style>
+  <table border="1" class="dataframe">
+    <thead>
+      <tr style="text-align: right;">
+        <th></th>
+        <th>Number of Excerpts</th>
+      </tr>
+      <tr>
+        <th>Number of Sentences in Excerpt</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>    
     <tr>
       <th>30</th>
       <td>2</td>
@@ -399,15 +180,8 @@ sentence_counts_df.sort_index()
 
 
 
-### Analysis by Article
-
-
-```python
-data_df.groupby('file').excerpt_lengths.describe()
-```
-
-
-
+#### Summary Analysis by Article
+The following table shows summary statistics of the excerpt lengths for each file.
 
 <div>
 <style>
@@ -486,27 +260,12 @@ data_df.groupby('file').excerpt_lengths.describe()
 </table>
 </div>
 
-
+Based on these results, it seems there is a significant number of existing excerpts of a length of a single sentence, so these excerpts will be further analysed, as a possible prospect for training the sentence classifier. The biggest issues present in the data, is that several excerpts are quite long, with many over 20 sentences, these excerpts will cause issues in both training and testing a sentence classifier due to their excessive length. These extra long excerpts will also be analyzed in the upcoming sections.
 
 ## Analysis of Single Sentence Excerpts
 
-From these results we can see that most of the excerpts have only one sentence. This is good news, and if needed, this dataset of one sentence labels could be used to train a classifier, or use it as the test set to test the classifier on single sentences.
+First we can assess the number of single sentence excerpts in each file, and with each account label. The results are shown in the output below.
 
-
-```python
-# extract and save a df of single sentences
-single_sents = [num_sent ==1  for num_sent in excerpt_lengths]
-single_sent_ids = list(compress(data_df.index, single_sents))
-single_sents_df = data_df.iloc[single_sent_ids, :]
-```
-
-
-```python
-# make sure there is a decent class distribution
-print(single_sents_df['ACCOUNT'].value_counts())
-# check if there is some representation from each file
-print(single_sents_df['file'].value_counts())
-```
 
     0    5284
     1     446
@@ -516,32 +275,12 @@ print(single_sents_df['file'].value_counts())
     data/Marysville - All Excerpts - Final - 1_2_2019.xlsx     781
     Name: file, dtype: int64
 
-
-
-```python
-# save the sentences data frame to csv for further use
-single_sents_df.to_csv("data/single_sents_df.csv")
-```
+This shows that there is a good number from each event dataset. The main issue that could arise however is that there are only 446 single sentence excerpts labelled with accountability. This is quite a low number if it is to be used for both testing and training.
 
 ## Analysis of Long Excerpts
 
-There are several exceedingly long excerpts of over 25 sentences. This may be due to errors in the sentence tokenization, and so will be inspected manually. There are only about 20 total excerpts that are quite long, so it will not be too difficult to inspect them and decide if there are errors or if they should be kept in the dataset as is.
+There are several exceedingly long excerpts of over 25 sentences. This may be due to errors in the sentence tokenization, and so will be inspected. First we can assess the breakdown of label and files with long excerpts. Shown below is that for super long excerpts, there are very few with the label accountability, only 5.
 
-
-```python
-# extract and save a df of single sentences
-long_excerpts = [num_sent > 25  for num_sent in excerpt_lengths]
-long_excerpt_ids = list(compress(data_df.index, long_excerpts))
-long_excerpt_df = data_df.iloc[long_excerpt_ids, :]
-```
-
-
-```python
-# check the labels )it would be a good idea to remove non-account documents that are too long)
-print(long_excerpt_df['ACCOUNT'].value_counts())
-# check if there is some representation from each file
-print(long_excerpt_df['file'].value_counts())
-```
 
     0    32
     1     5
@@ -550,13 +289,7 @@ print(long_excerpt_df['file'].value_counts())
     data/Newtown - All Excerpts - 1-2-2019.xlsx       18
     Name: file, dtype: int64
 
-
-
-```python
-long_excerpt_df.groupby('ACCOUNT').describe()
-```
-
-
+Descriptive statistics providing more details are shown in the following chart.
 
 
 <div>
@@ -629,123 +362,8 @@ long_excerpt_df.groupby('ACCOUNT').describe()
 </table>
 </div>
 
+Below is one example of an extra long excerpt with the label accountability (only one is shown because they are quite long). It can be seen that there are many sentences in this long excerpt that would not be clearly related to accountability. So these long excerpts will be contributing much noise into the training and testing of a sentence based classifier.
 
-
-
-```python
-for excerpt in long_excerpt_df.loc[long_excerpt_df['ACCOUNT'] == 1].Excerpts:
-    print("********************************************")
-    print(excerpt)
-    print("********************************************")
-```
-
-    ********************************************
-    Elliot Rodger here.
-
-    This is my last video . It all has to come to this. Tomorrow is the day of
-    retribution; the day in which I will have my revenge against humanity. Against
-    all of you.
-
-    For the last eight years of my life , ever since I hit puberty, I have been
-    forced to endure an existence of loneliness, rejection and unfulfilled desires.
-    All because girls have never been attracted to me. Girls gave their affection
-    and sex and love to other men but never to me. I am 22, and I am still a virgin.
-    I have never even kissed a girl. I have been through college for 21 / 2 years,
-    more than that actually, and I am still a virgin. It has been very torturous. .
-    . .
-
-    College is the time when everyone experiences those things such as sex and fun
-    and pleasure. In those years, I have had to rot in loneliness. It is not fair.
-    You girls have never been attracted to me. I don't know why you girls aren't
-    attracted me. But I will punish you all for it. It is an injustice, a crime. I
-    don't know what you don't see in me. I am the perfect guy, and yet you throw
-    yourselves at all these obnoxious men instead of me - the supreme gentleman. I
-    will punish all of you for it.
-
-    On the day of retribution , I am going to enter the hottest sorority house of
-    UCSB, and I will slaughter every single spoiled, stuck-up blond slut I see
-    inside there. . . .
-
-    All those girls that I have desired so much, they all rejected me and looked
-    down on me as an inferior man . . . while they throw themselves at these
-    obnoxious brutes. I will take great pleasure in slaughtering all of you. You
-    will finally see that I am, in truth, the superior one. The true alpha male.
-
-    After I have annihilated every single girl in the sorority house , I will take
-    to the streets of Isle Vista and slay every single person I see there. All those
-    popular kids who live such lives of hedonistic pleasure while I have had to rot
-    in loneliness all these years . . . now, I will be a god compared to you. You
-    will all be animals. You are animals, and I will slaughter you like animals. I
-    will be a god, exacting my retribution on all those who deserve it. And you do
-    deserve it, just for the crime of living a better life than me. All you popular
-    kids, you never accepted me, and now you will all pay for it."
-
-    Girls, all I have ever wanted was to love you and to be loved by you. I wanted a
-    girlfriend, I wanted sex, I wanted love, affection, adoration. You think I am
-    unworthy of it. That is a crime that can never be forgiven. If I can't have you,
-    girls, I will destroy you. You denied me a happy life, and in turn I will deny
-    all of you life. It is only fair. I hate all of you. Humanity is a disgusting,
-    wretched, depraved species. If I had it in my power, I would stop at nothing to
-    reduce every single one of you to mountains of skulls, rivers of blood. You
-    deserve to be annihilated. I will give that to you. You never showed me any
-    mercy, so I will show you none. You forced me to suffer all my life, now I will
-    make all of you suf...
-    ********************************************
-    ********************************************
-    Hi. Elliot Rodger here. Well, this is my last video. It all has to come to this.
-    Tomorrow is the day of retribution. The day in which I will have my revenge
-    against humanity, against all of you.
-
-    For the last eight years of my life, ever since I've hit puberty, I've been
-    forced to endure an existence of loneliness, rejection and unfulfilled desires
-    all because girls have never been attracted to me. Girls gave their affection
-    and sex and love to other men, but never to me. I'm 22 years old and still a
-    virgin. I've never even kissed a girl. I've been through college for 2½ years,
-    more than that actually, and I'm still a virgin.
-
-    It has been very torturous. College is the time when everyone experiences those
-    things such as sex and fun and pleasure. In those years, I've had to rot in
-    loneliness.
-
-    It's not fair. You girls have never been attracted to me. I don't know why you
-    girls aren't attracted to me, but I will punish you all for it.
-
-    It's an injustice, a crime, because I don't know what you don't see in me. I'm
-    the perfect guy, and yet you throw yourselves at all these obnoxious men instead
-    of me - the supreme gentleman. I will punish all of you for it (creepy laugh).
-
-    On the day of retribution, I am going to enter the hottest sorority house of
-    UCSB and I will slaughter every single spoiled stuckup blond slut I see inside
-    there.
-
-    All those girls that I've desired so much. They would have all rejected me and
-    looked down upon me as an inferior man if I ever made a sexual advance towards
-    them, while they throw themselves at these obnoxious brutes. I'll take great
-    pleasure in slaughtering all of you. You will finally see that I am in truth the
-    superior one. The true alpha man (creepy laugh). Yes.
-
-    After I've annihilated every single girl in the sorority house, I'll take to the
-    streets of Isla Vista and slay every single person I see there - all those
-    popular kids who live such lives of hedonistic pleasure while I've had to rot in
-    loneliness for all these years.
-
-    They've all looked down upon me every time I tried to go and join them. They've
-    all treated me like a mouse. Well, now I will be a god compared to you. You will
-    all be animals. You are animals, and I will slaughter you like animals. And I'll
-    be a god exacting my retribution on all those who deserve it. And you do deserve
-    it, just for the crime of living a better life than me. All you popular kids.
-    You've never accepted me, and now you'll all pay for it.
-
-    And girls. All I've ever wanted was to love you and to be loved by you. I've
-    wanted a girlfriend, I've wanted sex, I've wanted love, affection, adoration.
-    You think I'm unworthy of it. That's a crime that can never be forgiven. If I
-    can't have you, girls, I will destroy you. (creepy laugh)
-
-    You denied me a happy life, and in turn I will deny all of you life. (laughs)
-    It's only fair. I hate all of you. Humanity is a disgusting, wretched, depraved
-    species. If I had it in my power I would stop at nothing to reduce every single
-    one of you to m...
-    ********************************************
     ********************************************
     Some of Elliot Rodger's online posts leading up to Friday's shooting:
     One year ago: Rodger begins revealing his views on women, dating and his own life in comments on several YouTube videos. One video
@@ -772,107 +390,13 @@ for excerpt in long_excerpt_df.loc[long_excerpt_df['ACCOUNT'] == 1].Excerpts:
     May 23: Rodger posts several more videos to YouTube, including his detailed plan titled "Elliot Rodger's Retribution." "All you popular
     kids, you've never accepted me; now you'll all pay for it," he said.
     ********************************************
-    ********************************************
-    Rodger saw every female as a "tall, hot blonde" -- and, this being California, that's at a campus that's only 50 percent white. He viewed all
-    couples as his sworn enemies causing his suffering.
-
-    Although Rodger loved driving his car, he "soon learned the hard way" not to drive on Friday and Saturday nights, where he "frequently
-    saw bands of teenagers roaming the streets." They "had pretty girls beside them," probably on their way to "get drunk and have sex and
-    do all sorts of fun pleasurable things that I've never had the chance to do. Damn them all!"
-
-    At Santa Barbara City College, he dropped his sociology class on the first day of school "because there was this extremely hot blonde girl
-    in the class with her brute of a boyfriend." Rodger couldn't even sit through the whole first class with them, merely for being a couple.
-
-    Santa Monica Pier was out for him, too: "I saw young couples everywhere. ... Life was too unfair to me." On a trip to England, he refused
-    to leave his hotel room so he wouldn't have to see men walking with their girlfriends.
-
-    The "cruelty" of women apparently consisted of the failure of any "tall, hot blondes" to approach Rodger and ask for sex. He would walk
-    around for hours "in the desperate hope that I might possibly cross paths with some pretty girl who would be attracted to me."
-
-    But only once, in the entire 141-page manifesto, does Rodger attempt to speak to a girl himself. She's a total stranger walking past him on
-    a bridge, and he musters up the courage to say "hi." He claims she "kept on walking" and said nothing. She probably didn't hear him. But
-    he called her a "foul bitch" and went to a bathroom to cry for an hour.
-
-    Although Rodger repeatedly denounces the world and everyone in it for "cruelty and injustice," he was the bully more often than the
-
-
-    bullied, especially as time went on, and his rage increased.
-
-    He hectors his mother to marry "any wealthy man" because it would "be a way out of my miserable and insignificant life." He tells her "she
-    should sacrifice her well-being for the sake of my happiness."
-    When flying first class, he says, "I took great satisfaction as I passed by all of the other people who flew economy, giving all of the
-
-    younger passengers a cocky little smirk whenever they looked at me."
-    Meanwhile, in 141 pages, the worst thing anyone ever did to him was not say "hi" back.
-    But the story that sounds the most like Gogol's Poprishchin hearing two dogs talking in Russian is Rodger's claim that his stepmother
 
 
-    bragged to him that his stepbrother, Jazz -- her own 6-year-old son! -- "would be a success with girls and probably lose his virginity early."
-    I know Moroccan cultural mores are different, but I'm calling "auditory hallucination" on that one.
-    A family friend, Simon Astaire, described Rodger's flat affect, common to schizophrenics, saying he "couldn't look at you straight in the
+It seems like these passages are way to long to be of use in training for sentence classification. Breaking passages this long up into sentences to use for training would add a lot of noise to the training data, and this would be better to avoid. Given the data set is quite large, with thousands of existing excerpts, removing these will not hurt the training, and given that these particular excerpts would be contributing quite a lot of noise, it would be best to remove them.
 
+Given this insight, the charts were inspected again, to consider removing even more excerpts that are too long. Since 75% of the data has excerpts of less than 5 sentences, if there is enough accountability labels present in this 75% subset of the dataset, it might be best to restrict the new dataset for training sentence classifiers to only use the excerpts with less than 5 sentences.
 
-    eye and looked at your feet. It was unbearable."
-    ********************************************
-    ********************************************
-    If only it was as simple as one madman. Only as infrequent as one grim Friday.
-
-
-    But it's not. You wonder if we have created too fertile a breeding ground for violence. You wonder why the predominant emotion among
-    so many of us so often is rage.
-    And then you look around, and the way we communicate with one another.
-    You look at our talk shows that once fostered thoughtful discussion and meaningful debate. Now they value one word only. Attack. Attack.
-
-
-    Attack. The more vicious the better, because it sells.
-    You look at our Internet, and its vast promise of an interchange of ideas. And then see how that promise has been perverted, to where
-
-
-    assault is made all the easier by anonymity, and even the media no longer has use for beauty or perspective, because scandal and
-    conflict and heated rhetoric get so many more computer hits.
-    You look at our entertainment, and note the high body count, where we are numb to bloodshed and blind to its consequences. Where the
-
-
-    winner is often the one who kills best.
-
-
-    I look at my own pitifully trivial world of sport. Where proposals for safer football rules are hooted down, because the game might be less
-    violent, and the crowds might stay away.
-    I look at some of the mail I get. Abusive, brutal language from those furious about a Heisman vote or top 20 pick. If college football
-
-
-    provokes such fury, one can only imagine what the real world must do.
-
-
-    If rage and rancor are so much a part of our daily lives, it should not be a shock that gunfire breaks out. It has happened so often, that
-    now when the first reports come, we ask the same questions, dulled as we are by mayhem.
-    Where? How many? How young?
-    What terrible questions for a society to have to keep asking itself.
-    No, our violence-rich culture does not make murderers of us all. But cigarettes don't give everyone lung cancer. That does not make them
-
-
-    non-lethal.
-    ********************************************
-
-
-It seems like these passages are way to long to be of use in training for sentence classification. Breaking passages this long up into sentences to use for training would add a lot of noise to the training data, and this would be better to avoid. Given the data set is quite large, with thousands of existing excerpts, removing only around 40 will not hurt the training, and given that these particular excerpts would be contributing quite a lot of noise, it would be best to remove them.
-
-Given this result, the charts were inspected again, to consider removing even more excerpts that are too long. Since 75% of the data has excerpts of less than 5 sentences, if there is enough accountability labels present in this subset of the dataset, it might be best to restrict the new dataset for training sentence classifiers to only use the excerpts with less than 5 sentences.
-
-
-```python
-long_excerpts = [num_sent > 5  for num_sent in excerpt_lengths]
-long_excerpt_ids = list(compress(data_df.index, long_excerpts))
-long_excerpt_df = data_df.iloc[long_excerpt_ids, :]
-```
-
-
-```python
-# check the labels )it would be a good idea to remove non-account documents that are too long)
-print(long_excerpt_df['ACCOUNT'].value_counts())
-# check if there is some representation from each file
-print(long_excerpt_df['file'].value_counts())
-```
+A break down of the excerpts containing five sentences or less is shown below. The counts of the labels is shown (1 = accountability, 0= not accountability), and the number of excerpts in each file is also shown. It looks like a reasonable ratio of account to not account labels, given that there is a class imbalance in the overall dataset as well.
 
     0    3468
     1     803
@@ -883,96 +407,7 @@ print(long_excerpt_df['file'].value_counts())
     Name: file, dtype: int64
 
 
-
-```python
-long_excerpt_df.groupby('ACCOUNT').describe()
-```
-
-
-
-
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th></th>
-      <th colspan="8" halign="left">excerpt_lengths</th>
-    </tr>
-    <tr>
-      <th></th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-      <th>min</th>
-      <th>25%</th>
-      <th>50%</th>
-      <th>75%</th>
-      <th>max</th>
-    </tr>
-    <tr>
-      <th>ACCOUNT</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>3468.0</td>
-      <td>9.051038</td>
-      <td>4.07154</td>
-      <td>6.0</td>
-      <td>6.0</td>
-      <td>8.0</td>
-      <td>10.0</td>
-      <td>48.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>803.0</td>
-      <td>9.125778</td>
-      <td>4.31842</td>
-      <td>6.0</td>
-      <td>6.5</td>
-      <td>8.0</td>
-      <td>10.0</td>
-      <td>60.0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-### save the sentences_df containing only excerpts with less than 5 sentences
-short_excerpts_df = sentences_df.loc[sentences_df['excerpt_length']<5]
-short_excerpts_df.shape
-short_excerpts_df.groupby(['file', 'ACCOUNT', 'excerpt_length']).count()
-```
-
-
-
+A detailed breakdown of the sentence counts for each file for each account label with excerpts of length 1-4 sentences is shown below.
 
 <div>
 <style>
@@ -994,14 +429,12 @@ short_excerpts_df.groupby(['file', 'ACCOUNT', 'excerpt_length']).count()
       <th></th>
       <th></th>
       <th></th>
-      <th>Sentences</th>
-      <th>StoryID</th>
+      <th>Number of Excerpts</th>
     </tr>
     <tr>
       <th>file</th>
       <th>ACCOUNT</th>
       <th>excerpt_length</th>
-      <th></th>
       <th></th>
     </tr>
   </thead>
@@ -1011,42 +444,34 @@ short_excerpts_df.groupby(['file', 'ACCOUNT', 'excerpt_length']).count()
       <th rowspan="4" valign="top">0</th>
       <th>1</th>
       <td>1638</td>
-      <td>1638</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2740</td>
       <td>2740</td>
     </tr>
     <tr>
       <th>3</th>
       <td>2655</td>
-      <td>2655</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2524</td>
       <td>2524</td>
     </tr>
     <tr>
       <th rowspan="4" valign="top">1</th>
       <th>1</th>
       <td>226</td>
-      <td>226</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>646</td>
       <td>646</td>
     </tr>
     <tr>
       <th>3</th>
       <td>969</td>
-      <td>969</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>840</td>
       <td>840</td>
     </tr>
     <tr>
@@ -1054,42 +479,34 @@ short_excerpts_df.groupby(['file', 'ACCOUNT', 'excerpt_length']).count()
       <th rowspan="4" valign="top">0</th>
       <th>1</th>
       <td>743</td>
-      <td>743</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>1170</td>
       <td>1170</td>
     </tr>
     <tr>
       <th>3</th>
       <td>1386</td>
-      <td>1386</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>1172</td>
       <td>1172</td>
     </tr>
     <tr>
       <th rowspan="4" valign="top">1</th>
       <th>1</th>
       <td>38</td>
-      <td>38</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>102</td>
       <td>102</td>
     </tr>
     <tr>
       <th>3</th>
       <td>231</td>
-      <td>231</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>176</td>
       <td>176</td>
     </tr>
     <tr>
@@ -1097,42 +514,34 @@ short_excerpts_df.groupby(['file', 'ACCOUNT', 'excerpt_length']).count()
       <th rowspan="4" valign="top">0</th>
       <th>1</th>
       <td>2903</td>
-      <td>2903</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>4260</td>
       <td>4260</td>
     </tr>
     <tr>
       <th>3</th>
       <td>4473</td>
-      <td>4473</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>3976</td>
       <td>3976</td>
     </tr>
     <tr>
       <th rowspan="4" valign="top">1</th>
       <th>1</th>
       <td>182</td>
-      <td>182</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>382</td>
       <td>382</td>
     </tr>
     <tr>
       <th>3</th>
       <td>438</td>
-      <td>438</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>404</td>
       <td>404</td>
     </tr>
   </tbody>
