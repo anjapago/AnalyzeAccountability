@@ -38,150 +38,9 @@ The analysis can be repeated on each file individually, to make sure that none o
 
 ![png](/AnalyzeAccountability/assets/output_10_1.png)
 
-#### Most Frequently Occurring Excerpt Lengths
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Number of Excerpts</th>
-    </tr>
-    <tr>
-      <th>Number of Sentences in Excerpt</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <td>5730</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>4650</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3384</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2273</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>1564</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>1180</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>785</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>591</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>448</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>286</td>
-    </tr>
-    </tbody>
-  </table>
-  </div>
-
-
-  #### Least Frequently Occurring Excerpt Lengths
-
-  <div>
-  <style>
-      .dataframe thead tr:only-child th {
-          text-align: right;
-      }
-
-      .dataframe thead th {
-          text-align: left;
-      }
-
-      .dataframe tbody tr th {
-          vertical-align: top;
-      }
-  </style>
-  <table border="1" class="dataframe">
-    <thead>
-      <tr style="text-align: right;">
-        <th></th>
-        <th>Number of Excerpts</th>
-      </tr>
-      <tr>
-        <th>Number of Sentences in Excerpt</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>    
-    <tr>
-      <th>30</th>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>31</th>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>34</th>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>35</th>
-      <td>6</td>
-    </tr>
-    <tr>
-      <th>42</th>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>44</th>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>47</th>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>48</th>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>60</th>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
 
 #### Summary Analysis by Article
-The following table shows summary statistics of the excerpt lengths for each file.
+The following table shows summary statistics of the excerpt lengths for each file, including the percentiles below a certain number of sentences. For example, this shows that for all three articles, 50% of the articles are less than three sentences in length. The mean is also shown, but this mean would be not a good representative statistic because the distribution is very skewed. The min and max number of sentence in each excerpt is also shown for each file. 
 
 <div>
 <style>
@@ -260,7 +119,7 @@ The following table shows summary statistics of the excerpt lengths for each fil
 </table>
 </div>
 
-Based on these results, it seems there is a significant number of existing excerpts of a length of a single sentence, so these excerpts will be further analysed, as a possible prospect for training the sentence classifier. The biggest issues present in the data, is that several excerpts are quite long, with many over 20 sentences, these excerpts will cause issues in both training and testing a sentence classifier due to their excessive length. These extra long excerpts will also be analyzed in the upcoming sections.
+Based on these results, it seems there is a significant number of existing excerpts of a length of a single sentence, so these excerpts will be further analyzed, as a possible prospect for training the sentence classifier. The biggest issues present in the data, is that several excerpts are quite long, with many over 20 sentences, these excerpts will cause issues in both training and testing a sentence classifier due to their excessive length. These extra long excerpts will also be analyzed in the upcoming sections.
 
 ## Analysis of Single Sentence Excerpts
 
@@ -379,9 +238,7 @@ Below is one example of an extra long excerpt with the label accountability (onl
     the same title is re-uploaded Friday, May 23, the day of the killings. "I don't know why you girls are so repulsed by me. It doesn't make
     sense," he said. "I do everything I can to appear attractive to you. I dress nice, I'm sophisticated. I'm magnificent. I have a nice car, a
     BMW. Well, it's nicer than 90 percent of the people in my college."
-    April 24: Rodger wakes up with a cold and decides to postpone his plan to May 24.
-
-April 30: Authorities do a well-being check on Rodger after his family calls police about his YouTube videos. Rodger says in his manifesto
+    April 24: Rodger wakes up with a cold and decides to postpone his plan to May 24. April 30: Authorities do a well-being check on Rodger after his family calls police about his YouTube videos. Rodger says in his manifesto
     that he tactfully tells them the videos were a misunderstanding. "If they had demanded to search my room ... that would have ended
     everything. For a few horrible seconds, I thought it was all over."
     May 20: Rodger posts a 59-second video that shows his face as he drives around wearing sunglasses and a collared shirt, playing
@@ -712,7 +569,7 @@ There are some issues with both of these approaches.
 
 #### Evaluate on only single sentence excerpts
 
-The main issue with this, is that the distribution of features may different in the single sentence excerpts than the rest of the data set. For example, the fact that these single sentences were able to fully capture a statement about accountability, indicate that perhaps they have some unigue sentence structure and terms that would not be present throughout the rest of the training data of excerpts that were more than one sentence. There are many issues that can arise from having a test set with a different distribution of features from the training set.
+The main issue with this, is that the distribution of features may different in the single sentence excerpts than the rest of the data set. For example, the fact that these single sentences were able to fully capture a statement about accountability, indicate that perhaps they have some unique sentence structure and terms that would not be present throughout the rest of the training data of excerpts that were more than one sentence. There are many issues that can arise from having a test set with a different distribution of features from the training set.
 
 If the data is trained as well only on single sentences, then this would likely lead to the best possible performance in this situation, since it is learning the features relevant to single sentences and evaluating based on sentences with those features as well. The main issue with this approach is that this greatly restricts the size of the dataset, and likely misses out on many examples of discussing accountability that is not present in these few excerpts. However the size of this data of single sentences alone, would actually be sufficient to train a simple classifier.
 
@@ -720,7 +577,7 @@ If the data is trained as well only on single sentences, then this would likely 
 
 Another approach that would increase the size of the usable data, and also likely make the classifier able to generalize to more ways of discussing accountability, would be to evaluate based on the excerpts that were transformed into single labelled sentences.
 
-The main issue with this approach, is that it is possible this would be introducing too much label noise into the evaluation. The amount of label noise, could be as much as 65% of the labels from the short excerpts dataset, in which case the evaluation of results would have a high variance. The fact that the label noise introduced by this method is assymetric will also pose additional issues with the evaluation.  
+The main issue with this approach, is that it is possible this would be introducing too much label noise into the evaluation. The amount of label noise, could be as much as 65% of the labels from the short excerpts dataset, in which case the evaluation of results would have a high variance. The fact that the label noise introduced by this method is asymetric will also pose additional issues with the evaluation.  
 
 
 ### How to Train
@@ -729,11 +586,11 @@ The next issue to consider is how to train. This method is more straightforward 
 
 #### Using Only Single Sentence Excerpts
 
-The issue with this method as mentioned before, is that the excerpts with onyl single sentences may contain unique features, and have a very different distribution of features from the rest of the dataset. Also the size of data available for training is reduced, however certain model will still be ok with this size of data.
+The issue with this method as mentioned before, is that the excerpts with only single sentences may contain unique features, and have a very different distribution of features from the rest of the dataset. Also the size of data available for training is reduced, however certain model will still be ok with this size of data.
 
 #### Converting Excerpts into Labelled Sentences
 
-The next approach, to convert more of the dataset into labelled sentences will increase the size of the data, but result in training in the presenve of label noise. Asymetric label noise can be tricky to deal with in training, however there are existing approaches such as noise filters and noise robust models that can be used to accommodate this.
+The next approach, to convert more of the dataset into labelled sentences will increase the size of the data, but result in training in the presence of label noise. Asymmetric label noise can be tricky to deal with in training, however there are existing approaches such as noise filters and noise robust models that can be used to accommodate this.
 
 #### Using Original Length Excerpts
 
