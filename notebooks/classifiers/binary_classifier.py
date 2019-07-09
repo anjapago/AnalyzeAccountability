@@ -49,7 +49,7 @@ def load_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
                                         "data/Marysville - All Excerpts - Final - 1_2_2019.xlsx",
                                         "data/Newtown - All Excerpts - 1-2-2019.xlsx"]):
 
-    
+
     excerpts = []
     account_labels = []
     original_file = []
@@ -57,13 +57,17 @@ def load_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
     for file_name in file_names:
         data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
         data = data.dropna(axis=0)
-        ex_col = list(data.columns)[1]
+        #ex_col = list(data.columns)[1]
+        ex_col = [colname if "Excerpts" in colname else "" for colname in data.columns]
+        ex_col = "".join(ex_col)
+        if ex_col is "":
+            ex_col = "Sentences"
         #print("Excerpt column: "+str(ex_col))
         excerpts.extend(list(data[ex_col]))
         account_labels.extend(list(data['ACCOUNT']))
         original_file.extend([file_name]*len(data[ex_col]))
         docid.extend(list(data['StoryID']))
-    
+
     output_data = {'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels}
     return pd.DataFrame(output_data)
 
@@ -71,30 +75,33 @@ def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xls
                                         "Marysville - All Excerpts - Final - 1_2_2019.xlsx",
                                         "Newtown - All Excerpts - 1-2-2019.xlsx"]):
 
-    # file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx",
-    #             "Marysville - All Excerpts - Final - 1_2_2019.xlsx",
-    #             "Newtown - All Excerpts - 1-2-2019.xlsx"]
-
     excerpts = []
     account_labels = []
     for file_name in file_names:
-        data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
+        if 'xlsx' in file_name:
+            data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
+        else:
+            data = pd.read_csv(file_name, encoding = 'utf-8')
+
         data = data.dropna(axis=0)
-        ex_col = list(data.columns)[1]
-        #print("Excerpt column: "+str(ex_col))
+        ex_col = [colname if "Excerpts" in colname else "" for colname in data.columns]
+        ex_col = "".join(ex_col)
+        if ex_col is "":
+            ex_col = "Sentences"
+
         excerpts.extend(list(data[ex_col]))
         account_labels.extend(list(data['ACCOUNT']))
 
 
     # stem + count
     docs = [stem_tokenizer(doc) for doc in excerpts]
-    count_vectorizer = CountVectorizer(max_features=1500, min_df=5, max_df=0.7,
+    count_vectorizer = CountVectorizer(max_features=1000, min_df=10, max_df=0.7,
                                         stop_words=stopwords.words('english'))
     stem_count_X = count_vectorizer.fit_transform(docs).toarray()
 
     # stem + tfidf
     docs = [stem_tokenizer(doc) for doc in excerpts]
-    tfidf_vectorizer = TfidfVectorizer(max_features=1500, min_df=5, max_df=0.7,
+    tfidf_vectorizer = TfidfVectorizer(max_features=1000, min_df=10, max_df=0.7,
                                         stop_words=stopwords.words('english'))
     stem_tfidf_X = tfidf_vectorizer.fit_transform(docs).toarray()
 
@@ -103,9 +110,9 @@ def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xls
                     'type':["count vector", "tfidf vector"]}
 
     #Create a svm Classifier
-    clf = svm.SVC(kernel='linear') # Linear Kernel
-    logreg = LogisticRegression(solver='lbfgs', max_iter=1000)
-    rf = RandomForestClassifier(n_estimators=1000, random_state=0)
+    clf = svm.SVC(kernel='linear', class_weight = 'balanced') # Linear Kernel
+    logreg = LogisticRegression(solver='lbfgs', max_iter=1000, class_weight='balanced')
+    rf = RandomForestClassifier(n_estimators=500, random_state=0, class_weight="balanced")
 
     classifiers = [clf, logreg, rf]
     classifier_f1s = []
@@ -115,15 +122,18 @@ def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xls
     for classi in classifiers:
         f1 = []
         y_preds = []
+        print("Processing classifier: "+str(type(classi).__name__))
         for doc_vector in doc_vectors['vectors']:
             docs_train, docs_test, y_train, y_test \
             = train_test_split(pd.DataFrame(doc_vector), account_labels,
-                                test_size=0.2, random_state=0)
+                                test_size=0.25, random_state=50)
 
             classi.fit(docs_train, y_train)
             y_pred = classi.predict(docs_test)
             f1.append(f1_score(y_test,y_pred))
             y_preds.append(y_pred)
+
+        print("Classifier: "+str(type(classi).__name__)+" f1: "+str(f1))
 
         best_vec = np.argmax(f1)
         print(doc_vectors['type'][best_vec]+" "+str(type(classi).__name__)+" results:")
