@@ -40,7 +40,7 @@ The analysis can be repeated on each file individually, to make sure that none o
 
 
 #### Summary Analysis by Article
-The following table shows summary statistics of the excerpt lengths for each file, including the percentiles below a certain number of sentences. For example, this shows that for all three articles, 50% of the articles are less than three sentences in length. The mean is also shown, but this mean would be not a good representative statistic because the distribution is very skewed. The min and max number of sentence in each excerpt is also shown for each file. 
+The following table shows summary statistics of the excerpt lengths for each file, including the percentiles below a certain number of sentences. For example, this shows that for all three articles, 50% of the articles are less than three sentences in length, and 75% of articles are less than 5 sentences in length. The mean is also shown, but this mean would be not a good representative statistic because the distribution is very skewed. The min and max number of sentence in each excerpt is also shown for each file.
 
 <div>
 <style>
@@ -253,7 +253,7 @@ It seems like these passages are way to long to be of use in training for senten
 
 Given this insight, the charts were inspected again, to consider removing even more excerpts that are too long. Since 75% of the data has excerpts of less than 5 sentences, if there is enough accountability labels present in this 75% subset of the dataset, it might be best to restrict the new dataset for training sentence classifiers to only use the excerpts with less than 5 sentences.
 
-### Compare Class and File Balance in Short Sentences Only
+### Compare Class and File Balance in Short Excerpts Only
 
 A break down of the excerpts containing five sentences or less is shown below. The counts of the labels is shown (1 = accountability, 0= not accountability), and the number of excerpts in each file is also shown. It looks like a reasonable ratio of account to not account labels, given that there is a class imbalance in the overall dataset as well.
 
@@ -292,8 +292,8 @@ A detailed breakdown of the sentence counts for each file for each account label
     </tr>
     <tr>
       <th>file</th>
-      <th>ACCOUNT</th>
-      <th>excerpt_length</th>
+      <th>Accountability label</th>
+      <th>Number of Sentences in Excerpt</th>
       <th></th>
     </tr>
   </thead>
@@ -408,9 +408,7 @@ A detailed breakdown of the sentence counts for each file for each account label
 </div>
 
 
-A new dataframe containing only sentences from excerpts of length less than 5 will be created and saved to csv for future use.
-
-A summary of the previous table showing the counts for just each account label is shown in the following table.
+A new dataframe containing only sentences from excerpts of length less than 5 will be created and saved to csv for future use. A summary of the previous table showing the counts for just each account label and file is shown in the following table. The far right column also shows the number of total sentences with each file and each label. This would give an idea of the class balance if it would be desired to used only individual sentences to test and train the classifier.
 
 
 <div>
@@ -429,126 +427,67 @@ A summary of the previous table showing the counts for just each account label i
 </style>
 <table border="1" class="dataframe">
   <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>Number of Excerpts</th>
-    </tr>
     <tr>
       <th>file</th>
-      <th>ACCOUNT</th>
-      <th></th>
+      <th>Accountability label</th>
+      <th>Number of Excerpts with < 5 sentences</th>
+      <th>Total Number of Sentences</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th rowspan="2" valign="top">data/Isla Vista - All Excerpts - 1_2_2019.xlsx</th>
+      <th rowspan="2" valign="top">Isla Vista</th>
       <th>0</th>
       <td>9557</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2681</td>
-    </tr>
-    <tr>
-      <th rowspan="2" valign="top">data/Marysville - All Excerpts - Final - 1_2_2019.xlsx</th>
-      <th>0</th>
-      <td>4471</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>547</td>
-    </tr>
-    <tr>
-      <th rowspan="2" valign="top">data/Newtown - All Excerpts - 1-2-2019.xlsx</th>
-      <th>0</th>
-      <td>15612</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1406</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-To compare how this would affect the class balance and balance of the files, compare the previous summary chart to a similar chart shown below, recalculated from the full dataset of excerpts.
-
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>Number of Excerpts</th>
-    </tr>
-    <tr>
-      <th>file</th>
-      <th>ACCOUNT</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th rowspan="2" valign="top">data/Isla Vista - All Excerpts - 1_2_2019.xlsx</th>
-      <th>0</th>
       <td>24695</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>2681</td>
       <td>8676</td>
     </tr>
     <tr>
-      <th rowspan="2" valign="top">data/Marysville - All Excerpts - Final - 1_2_2019.xlsx</th>
+      <th rowspan="2" valign="top">Marysville </th>
       <th>0</th>
+      <td>4471</td>
       <td>8389</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>547</td>
       <td>1573</td>
     </tr>
     <tr>
-      <th rowspan="2" valign="top">data/Newtown - All Excerpts - 1-2-2019.xlsx</th>
+      <th rowspan="2" valign="top">Newtown</th>
       <th>0</th>
+      <td>15612</td>
       <td>34400</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>1406</td>
       <td>3078</td>
     </tr>
   </tbody>
 </table>
 </div>
 
-The conclusions that can be drawn from this is that, it seems like removing the long excerpts will not have a big affect on the balance of classes or the balance of articles from the original dataset. This is good news, to be able to have a classifier trained more directly on shorter passages, which will be closer to its intended purpose. This only risk involved is that the distribution of features is not preserved.
+
+The conclusions that can be drawn from this is that, it seems like removing the long excerpts will not have a big affect on the balance of classes or the balance of articles from the original dataset. This is good news, to be able to have a classifier trained more directly on shorter passages, which will be closer to its intended purpose. This only risk involved is that the distribution of features is not preserved. Comparing the balance once transformed into a dataset of individually labelled sentences (the far right column), this shows that in this case also the balance will not be affected greatly.
 
 
-## Overview of Using this Data for a Sentence Classifier
+## Assessment of Using this Data for a Sentence Classifier
 
-One issue to consider, is that in using this transformation, additional noise is possible being introduced into the labels. For example, in an excerpt of four labels, it is possible that only one out of the four sentences actually makes a statement about accountability, that means there are three new sentences added to the training set that are incorrectly labelled. Incorrectly labelled training data is a problem known as "label noise". The specific type of label noise being introduced in this case is asymetric binary, random label noise, known as NAR label noise (noisy at random). The assumption made is that the noise introduced is independant of the features of the data, but not independant of the true class label.
-
-Only false postiive labels are being introduced, since all the sentences in an excerpt labelled as accountability are now being given the label accountability. It is a lot less likely there are many sentences in the excerpts that were labelled as not accountability, that should actually be labelled as accountability, resulting in the asymentric introduction of label noise being introduced. These considerations are important, since with correct assumptions about label noise introduced, label noise filters can be used.
-
-Label noise in the test set could also be an issue, but luckily we have a dataset of single sentences of sufficient size, that this could be used to make up the test data.
-
-To assess the overall possible amount of noise being introduced by this approach, lets assume each excerpt actually only contained one sentence about accountability. In this case, we can calculate how many sentences we now have in the short excerpts and full excerpts dataframes that are inccorrectly labelled.
+One issue to consider, is that in using this transformation, additional noise is possible being introduced into the labels. For example, in an excerpt of four labels, it is possible that only one out of the four sentences actually makes a statement about accountability, that means there are three new sentences added to the training set that are incorrectly labelled. Incorrectly labelled training data is a problem known as "label noise". To assess the overall possible amount of noise being introduced by this approach, lets assume each excerpt actually only contained one sentence about accountability. In this case, we can calculate how many sentences we now have in the short excerpts and full excerpts dataframes that are inccorrectly labelled.
 
     Percent incorrect sentences out of short excerpts sentences dataset: 65.15789473684211
     Percent incorrect sentences out of full excerpts sentences dataset: 86.92854690794958
+
+This is a fairly significant amount of noise being introduced into the labels. The specific type of label noise being introduced in this case is asymmetric binary, random label noise, known as NAR label noise (noisy at random). The assumption made is that the noise introduced is independant of the features of the data, but not independant of the true class label.
+
+Only false positive labels are being introduced, since all the sentences in an excerpt labelled as accountability are now being given the label accountability. It is a lot less likely there are many sentences in the excerpts that were labelled as not accountability, that should actually be labelled as accountability, resulting in the asymmetric introduction of label noise being introduced. These considerations are important, since with correct assumptions about label noise introduced, label noise filters can be used.
+
+Label noise in the test set could also be an issue, but luckily we have a dataset of single sentences of sufficient size, that this could be used to make up the test data.
 
 
 ## Approaches to Use Excerpts to Train Sentence Classifier
