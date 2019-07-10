@@ -16,8 +16,8 @@ The objective is to be able to detect sentences about accountability from within
 
 There are two versions of the data being tested:
 
-1) The excerpts that were only one sentence in length. There are about 6000 of these, which will be enough to make up a dataset of around 5000 for training and 1000 for testing. This should normally be sufficient, however due to the class imbalance of roughly 1:10 for accountability to non-accountability, the resulting test set will have only around 100 examples labelled with accountability.
-2) The excerpts of less than five sentences. These excerpts were processed into the form of individually labelled sentences, where each sentence was given the label of the original excerpt. This produces a much larger dataset, of around 34000 sentences in total. This will result in a much larger test set of around 9000, and this would allow around 1000 samples in the test set to have the accountability label. This is a much larger test set, however this approach has introduced noise into the given labels, because some of the sentences now labelled as accountability may not actually clearly be about accountability, since it may have been a different sentence in the excerpt that was making the statement about accountability.
+1. The excerpts that were only one sentence in length. There are about 6000 of these, which will be enough to make up a dataset of around 5000 for training and 1000 for testing. This should normally be sufficient, however due to the class imbalance of roughly 1:10 for accountability to non-accountability, the resulting test set will have only around 100 examples labelled with accountability.
+2. The excerpts of less than five sentences. These excerpts were processed into the form of individually labelled sentences, where each sentence was given the label of the original excerpt. This produces a much larger dataset, of around 34000 sentences in total. This will result in a much larger test set of around 9000, and this would allow around 1000 samples in the test set to have the accountability label. This is a much larger test set, however this approach has introduced noise into the given labels, because some of the sentences now labelled as accountability may not actually clearly be about accountability, since it may have been a different sentence in the excerpt that was making the statement about accountability.
 
 
 ## Analysis of Baseline Classifiers
@@ -45,3 +45,16 @@ One of the major issues hindering the performance of the classifier is the rough
 | SVM	| 0.43/0.64	| 0.39/0.81	|
 | Logistic Regression	| 0.42/0.74	|  0.40/0.80	|
 | Random Forest	| 0.69/0.41 | 0.67/0.59 |
+
+The most notable effect to observe, is that the the precision and recall scores for the short excerpts (<5 sentences) for the linear classifiers flipped, where the recall is now twice as high as the precision instead of the vice versa (in the previous chart). Also, the performance for random forest with short excerpts became more balanced between precision and recall. Overall the short excerpts once again seems a bit better than the single sentences.
+
+Addressing the class imbalance with simple approach did not result in a major improvement in results, so more research will be required to address the issues present in the data.
+
+## Future Performance Improvements
+
+From the results of this data the main observations about what could lead to improvement in results is as follows:
+
+1. Addressing the noisy labels: the performance has dropped significantly between the previous classifiers run on the full excerpts. The dataset of sentences made from excerpts of less than 5 sentences is now actually a bigger dataset with more examples than the previous dataset of full excerpts. Therefore the performance decrease in this case must be attributed to increasing the existing noise levels in the labels. There are many methods to address noisy labels, and so this could be experimented with as a promising approach to improve results.
+2. Input representation: because the performance of all models was quite similar, with top scores averaging to around 0.5 in f1 score (the harmonic mean of precision and recall), this indicates that there is a limit on the success of a classifier given this input representation of the text (i.e. the a more complex classification method with a more complex boundary type is unlikely to make an improvement). It seems the issues come from too little meaning being captured in the input bag of words unigram representation. The next steps to improve this will be to experiment with pre-trained embedding models, and also test more approaches with the simple vectorizers, using bag of features (e.g. possibly including n-grams, and dimensions reductions).
+
+These two areas seem to be the most likely approaches to improve results. Once some significant improvements has been seen, final steps to improve results would be tuning model hyper-parameters, and testing additional methods to deal with the class imbalance such as sampling.
