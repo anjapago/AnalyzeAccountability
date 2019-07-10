@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Sentence Classifier Baselines"
-date:   2019-07-010 00:00:30 -0400
+date:   2019-07-10 00:00:30 -0400
 categories: update
 permalink: /:categories/:year/:month/:day/:title.html
 ---
