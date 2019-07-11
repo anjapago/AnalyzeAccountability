@@ -9,7 +9,7 @@ permalink: /:categories/:year/:month/:day/:title.html
 This post will build on the baselines from the [previously tested](https://anjapago.github.io/AnalyzeAccountability/update/2019/06/05/binary-classifier.html) simple classifier methods, with the same objectives of calssifying accountability from excerpts of news articles.
 
 
-## BERT CLassification Method
+## BERT Classification Method
 
 
 
@@ -79,13 +79,18 @@ The results observed are shown in the chart below, with each performance measure
 
 The dropout value was changed a significant amount, however the changes in performance of both test and train were negligeable consider the variance of +/-0.3 possible in the performance measures (shown in the previous section).
 
-While drop out it known to be the most appropriate regularization for this application, another regularization method called L2 regularization was also tested by adding L2 to the loss function in training the classifier, and in this case the performance was also not affected.
+While drop out it known to be the most appropriate regularization for this application, another regularization method called L2 regularization was also tested by adding L2 to the loss function in training the classifier, and in this case the performance was also not improved.
 
 #### Experiment with number of epochs
 
+The experiments with number of epochs tested epochs: 1, 2, 3, 6 and 10. It was found that at epoch 3, the train set reaches close to 100% performance, and so continuing to train past that point would just increase the overfitting. Training for only 1 or 2 epochs was shown to hinder the test performance slightly, so 3 epochs was chosen as the right number of epochs to train for.
+
 #### Experiment with re-training the full network
+There is a setting called "trainable" when training the pre-trained BERT model. Sometimes, the vectors output by BERT should be used as is, and not be modified during the fine-tuning. Sometimes the fine-tuning can just be done on the final added on layers of BERT to customize it to a specific task or dataset. In the case of sentence classification, trainable should be set to True, and this was tested. This setting creates the most significant decrease in performance out of any other setting. This is due to the nature of the way BERT is used as a sentence classifier. The sentence representation must be trained given your domain specific dataset, and each sentence is represented by a pooled output component of the BERT outputs.
 
 #### Best Results
+
+The best results were achieved from the 0.9 setting for drop out, no L2, and running for 3 epochs, however there was not a very significant difference between results based on the performance measures. These values were also selected as the final choice of values, do to explanations of good settings from reviewing the literature.
 
 ### Repeat Testing on Sentence excerpts
 
@@ -131,18 +136,18 @@ Using the same settings as was used to get the previous best results, BERT was r
 | Short Excerpts as sentences | 0.73 | 0.64 |
 | Full Excerpts | 0.81 | 0.78 |
 
-### Conclusions
+### Discussion and Conclusions
 
-* Overfitting
-* Single Sentence vs Short excerpts
-* Sentence Based vs Full excerpts
-* BERT vs Simple classifiers
+* **Overfitting**: The results so far show that over-fitting is present for all data-sets, and no methods of regularization tried so far was able to make an improvement on this.
+* **Single Sentence vs Short excerpts**: The single sentences performance was quite a bit worse on recall than the short excerpts, but comparable in precision.
+* **Sentence Based vs Full excerpts**: The full excerpts performance was significantly better in both precision and recall than the sentence based methods. This is an unexpected result, because BERT typically performs better on sequences of shorter length. The decrease in performance is most likely due to features being more difficult to classify in single sentence based on the given labels - and this could e due to more errors introduced into the labels. Another reason could be that fundamentally the meaning associated with accountability must be captured by more than one sentence, which is a harder issue to address.
+* **BERT vs Simple classifiers**: The performance of BERT was a significant 0.1 higher than the performance in the simple baseline classifiers across most performance metrics. Most significant was the improvement in comparing the classification on the full excerpts. In comparing the sentence based classifiers, the simple models actually performed quite well on recall, though the precision was greatly decreased. Overall the average of these scores will be about 0.1 higher with BERT, which is a significant improvement.
 
 ## Future Improvements
 
 The biggest challenges in training this classifier is likely the noisy labels introduced in the sentence based classifier, and the class imbalance. Some approaches to address these issues in the future are shown in the following list.
 
-* Using Multi-class classification:
-* Adjusting loss function for class Imbalance
-* Sample for class Imbalance
-* Noise filter for noisy labels
+* **Using Multi-class classification**: the original dataset actually contains many different of labels, and so it could be used for multi-class classification. This would resolve the issue of class imbalance, since most of those classes are roughly evenly balanced, and so there would be no large skew towards one particular class due to class imbalance. Switching to multi-class classification could also improve the issue of asymmetrically noisy labels for the sentence classifier. In switching to sentence based labelled data, the noise would be introduced uniformly for all classes, instead of asymmetrically just into the accountability class. This could results in less performance decrease due to this issue. Bert can be fairly easily adjusted to the multi-class classification task, so this is a promising approach to investigate for this method.
+* **Adjusting loss function for class imbalance**: adjusting the loss function, as was done previously in the simple classifiers is another method that could be used to address the class imbalance.
+* **Sample for class Imbalance**: over or under-sampling methods can also be used to offset the class imbalance
+* **Noise filter for noisy labels**: noise filters can be applied to assess the levels of label noise in the data, and possibly reducing the label noise could lead to improvement in performance of the classifier. 
