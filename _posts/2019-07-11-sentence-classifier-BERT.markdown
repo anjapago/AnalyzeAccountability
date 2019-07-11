@@ -45,7 +45,7 @@ The findings from each of these experiments will be explained in the following s
 
 These preliminary experiments involved running the code a few times with different random states in the test/train split. This was to get an idea how much the performance measures would vary just because of the way the data was split into the test and train set.
 
-The finding were:
+The findings were:
 
 **random state = 0**
 
@@ -55,7 +55,7 @@ The finding were:
 
     test = {'auc': 0.8757505, 'eval_accuracy': 0.9472, 'false_negatives': 130.0, 'false_positives': 101.0, 'global_step': 1640, 'loss': 0.20042753, 'precision': 0.81867146, 'recall': 0.778157, 'true_negatives': 3688.0, 'true_positives': 456.0}
 
-These results show that for example, false negative and false positives can vary by as much as 20 each just based on a change in the test/train split. This translated to a change of 0.03 in precision and 0.02 in recall. 
+These results show that for example, false negative and false positives can vary by as much as 20 test instances each just based on a change in the test/train split. This translated to a change of 0.03 in precision and 0.02 in recall.
 
 Note, cross-validation could be used for more rigorous testing, but this could come at a cost of time. So, just keeping in mind, this amount of variability in the performance measures should be enough to correctly interpret future experimental results.
 
@@ -77,7 +77,9 @@ The results observed are shown in the chart below, with each performance measure
 | 0.6 | 0.80/0.77 | 0.96/0.97 |
 | 0.4 | 0.82/0.76 | 0.96/0.97 |
 
+The dropout value was changed a significant amount, however the changes in performance of both test and train were negligeable consider the variance of +/-0.3 possible in the performance measures (shown in the previous section).
 
+While drop out it known to be the most appropriate regularization for this application, another regularization method called L2 regularization was also tested by adding L2 to the loss function in training the classifier, and in this case the performance was also not affected.
 
 #### Experiment with number of epochs
 
