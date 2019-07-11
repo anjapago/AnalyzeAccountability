@@ -6,13 +6,14 @@ categories: update
 permalink: /:categories/:year/:month/:day/:title.html
 ---
 
-This post will build on the baselines from the [previously tested](https://anjapago.github.io/AnalyzeAccountability/update/2019/06/05/binary-classifier.html) simple classifier methods, with the same objectives of calssifying accountability from excerpts of news articles.
+This post will build on the baselines from the [previously tested](https://anjapago.github.io/AnalyzeAccountability/update/2019/06/05/binary-classifier.html) simple classifier methods, with the same objectives of classifying accountability from excerpts of news articles.
 
 
 ## BERT Classification Method
 
+BERT, "Bidirectional Encoder Representations from Transformers" is an open-source model developed by Google in 2018. It is a bi-directional transformer based model that has achieved state-of-the-art results on numerous natural language processing (NLP) tasks. This model is pre-trained on unsupervised tasks including language modeling (next word prediction), and next sentence prediction. Pre-training in an unsupervised way is very useful to encode meaning into the model that could not come from labelled data alone - the vast majority of existing text data is unlabelled. This pre-training allows downstream supervised tasks, such as text classification, to take advantage of all the information present in the vast amounts of unlabelled text data. The output model can be fined tuned with training data for a wide variety of task by adding one additional output layer.
 
-
+The first step before applying BERT is pre-processing of the text into tokens. Pre-processing is a very important step, and BERT requires a unique method of pre-processing call BPE based word tokenization. This approach splits up words into subwords and the word is then represented by a group of subwords, which is particularly useful to handle out-of-vocabulary terms. Representations of context is then learned for these subwords.
 
 ## Sentence Classifier Objectives
 
@@ -41,7 +42,7 @@ There were a series of simple experiments run to test BERT classifier on the ori
 
 The findings from each of these experiments will be explained in the following sections.
 
-#### Experiment with Random State
+#### Experiment with Random State in Test/Train Split
 
 These preliminary experiments involved running the code a few times with different random states in the test/train split. This was to get an idea how much the performance measures would vary just because of the way the data was split into the test and train set.
 
@@ -69,7 +70,7 @@ Theoretically increasing the amount of regularization should increase the perfor
 
 The results observed are shown in the chart below, with each performance measure indicating precision/recall.
 
-| Dropout rate | Test Performance | Train Performance|
+| Dropout keep rate | Test Performance | Train Performance|
 |--------------|------------------|------------------|
 | 1 | 0.82/0.77 | 0.96/0.97 |
 | 0.9 |0.82/0.78 | 0.96/0.97 |
@@ -150,4 +151,4 @@ The biggest challenges in training this classifier is likely the noisy labels in
 * **Using Multi-class classification**: the original dataset actually contains many different of labels, and so it could be used for multi-class classification. This would resolve the issue of class imbalance, since most of those classes are roughly evenly balanced, and so there would be no large skew towards one particular class due to class imbalance. Switching to multi-class classification could also improve the issue of asymmetrically noisy labels for the sentence classifier. In switching to sentence based labelled data, the noise would be introduced uniformly for all classes, instead of asymmetrically just into the accountability class. This could results in less performance decrease due to this issue. Bert can be fairly easily adjusted to the multi-class classification task, so this is a promising approach to investigate for this method.
 * **Adjusting loss function for class imbalance**: adjusting the loss function, as was done previously in the simple classifiers is another method that could be used to address the class imbalance.
 * **Sample for class Imbalance**: over or under-sampling methods can also be used to offset the class imbalance
-* **Noise filter for noisy labels**: noise filters can be applied to assess the levels of label noise in the data, and possibly reducing the label noise could lead to improvement in performance of the classifier. 
+* **Noise filter for noisy labels**: noise filters can be applied to assess the levels of label noise in the data, and possibly reducing the label noise could lead to improvement in performance of the classifier.
