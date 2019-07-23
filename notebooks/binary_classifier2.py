@@ -1,7 +1,7 @@
 import nltk
 import numpy as np
 import pandas as pd
-from nltk import pos_tag
+from nltk import pos_tag, sent_tokenize
 from nltk.corpus import wordnet, stopwords
 from nltk.stem import snowball, WordNetLemmatizer
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -13,8 +13,6 @@ from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 from sklearn import svm
 
-#nltk.download('stopwords')
-#nltk.download('punkt')
 
 def plot_coefficients(classifier_coefs, feature_names, top_features=20, show_neg = True):
     #coef = classifier.coef_.ravel()
@@ -45,15 +43,16 @@ def stem_tokenizer(doc):
     list_tokens = [tok.lower() for tok in stemmed_tokens if tok.isalpha()]
     return(' '.join(list_tokens))
 
-def load_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
-                            "data/Marysville - All Excerpts - Final - 1_2_2019.xlsx",
-                            "data/Newtown - All Excerpts - 1-2-2019.xlsx",
-                            "data/Charleston - All Excerpts - 7_15_2019.xlsx",
-                            "data/Orlando - All Excerpts - 7_15_2019.xlsx",
-                            "data/San Bernardino - All Excerpts - 7_15_2019.xlsx",
-                            "data/Vegas - All Excerpts - 7_15_2019.xlsx"]):
 
-
+# load data from xlsx
+def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
+                                "data/Marysville - All Excerpts - Final - 1_2_2019.xlsx",
+                                "data/Newtown - All Excerpts - 1-2-2019.xlsx",
+                                "data/Charleston - All Excerpts - 7_15_2019.xlsx",
+                                "data/Orlando - All Excerpts - 7_15_2019.xlsx",
+                                "data/San Bernardino - All Excerpts - 7_15_2019.xlsx",
+                                "data/Vegas - All Excerpts - 7_15_2019.xlsx"],
+                   max_sentences = None):
     excerpts = []
     account_labels = []
     original_file = []
@@ -62,14 +61,47 @@ def load_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
         if 'xlsx' in file_name:
             data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
         else:
-            data = pd.read_csv(file_name, encoding = 'utf-8')
+            print("wrong file type, input xlsx")
+            break
+
         data = data.dropna(axis=0)
-        #ex_col = list(data.columns)[1]
-        ex_col = [colname if "Excerpt" in colname else "" for colname in data.columns]
+        ex_col = [colname if "excerpt" in colname.lower() else "" for colname in data.columns]
         ex_col = "".join(ex_col)
-        if ex_col is "":
-            ex_col = "Sentences"
-        #print("Excerpt column: "+str(ex_col))
+
+        excerpts.extend(list(data[ex_col]))
+        labels = [1 if label =="True"  else label for label in data['ACCOUNT']]
+        labels = [0 if label =="False" else label for label in labels]
+        labels = [int(label) for label in labels]
+        account_labels.extend(labels)
+        original_file.extend([file_name]*len(data[ex_col]))
+        docid.extend(list(data['StoryID']))
+
+    short_excerpts = []
+    if max_sentences is not None: # filter outlong excerpts
+        for excerpt in excerpts:
+            excerpt_sentences = sent_tokenize(excerpt)
+            if len(excerpt_sentences) < max_sentences:
+                short_excerpts.append(excerpt)
+        excerpts = short_excerpts
+
+
+    output_data = {'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels}
+    return pd.DataFrame(output_data)
+
+# load processed data from csv
+def load_csv_data(file_names = ["data/short_excerpts_df.csv"]):
+    excerpts = []
+    account_labels = []
+    original_file = []
+    docid = []
+    for file_name in file_names:
+        if 'csv' in file_name:
+            data = pd.read_csv(file_name, encoding='utf-8')
+        else:
+            print("wrong file type, please use csv")
+
+        ex_col = "Sentences"
+
         excerpts.extend(list(data[ex_col]))
         labels = [1 if label =="True"  else label for label in data['ACCOUNT']]
         labels = [0 if label =="False" else label for label in labels]
@@ -81,20 +113,24 @@ def load_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
     output_data = {'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels}
     return pd.DataFrame(output_data)
 
-def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx",
-                                        "Marysville - All Excerpts - Final - 1_2_2019.xlsx",
-                                        "Newtown - All Excerpts - 1-2-2019.xlsx"]):
-
+def load_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
+                            "data/Marysville - All Excerpts - Final - 1_2_2019.xlsx",
+                            "data/Newtown - All Excerpts - 1-2-2019.xlsx",
+                            "data/Charleston - All Excerpts - 7_15_2019.xlsx",
+                            "data/Orlando - All Excerpts - 7_15_2019.xlsx",
+                            "data/San Bernardino - All Excerpts - 7_15_2019.xlsx",
+                            "data/Vegas - All Excerpts - 7_15_2019.xlsx"]):
     excerpts = []
     account_labels = []
+    original_file = []
+    docid = []
     for file_name in file_names:
         if 'xlsx' in file_name:
             data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
         else:
             data = pd.read_csv(file_name, encoding = 'utf-8')
-
         data = data.dropna(axis=0)
-        ex_col = [colname if "Excerpts" in colname else "" for colname in data.columns]
+        ex_col = [colname if "Excerpt" in colname else "" for colname in data.columns]
         ex_col = "".join(ex_col)
         if ex_col is "":
             ex_col = "Sentences"
@@ -104,7 +140,39 @@ def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xls
         labels = [0 if label =="False" else label for label in labels]
         labels = [int(label) for label in labels]
         account_labels.extend(labels)
+        original_file.extend([file_name]*len(data[ex_col]))
+        docid.extend(list(data['StoryID']))
 
+    output_data = {'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels}
+    return pd.DataFrame(output_data)
+
+def find_best_classifier(file_names):
+
+    excerpts = []
+    account_labels = []
+    # for file_name in file_names:
+    #     if 'xlsx' in file_name:
+    #         data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
+    #     else:
+    #         data = pd.read_csv(file_name, encoding = 'utf-8')
+    #
+    #     data = data.dropna(axis=0)
+    #     ex_col = [colname if "Excerpts" in colname else "" for colname in data.columns]
+    #     ex_col = "".join(ex_col)
+    #     if ex_col is "":
+    #         ex_col = "Sentences"
+    #
+    #     excerpts.extend(list(data[ex_col]))
+    #     labels = [1 if label =="True"  else label for label in data['ACCOUNT']]
+    #     labels = [0 if label =="False" else label for label in labels]
+    #     labels = [int(label) for label in labels]
+    #     account_labels.extend(labels)
+    if 'csv' in str(file_names):
+        data = load_csv_data(file_names)
+    else:
+        data = load_xlsx_data(file_names)
+    account_labels = data['ACCOUNT']
+    excerpts = data['Excerpts']
 
     # stem + count
     docs = [stem_tokenizer(doc) for doc in excerpts]
@@ -179,4 +247,4 @@ def find_best_classifier(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xls
     return results
 
 if __name__ == '__main__':
-    results = find_best_classifier()
+    results = find_best_classifier(["data/short_excerpts_df.csv"])
