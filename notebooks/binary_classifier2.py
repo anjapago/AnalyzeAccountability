@@ -41,6 +41,35 @@ def stem_tokenizer(doc):
     list_tokens = [tok.lower() for tok in stemmed_tokens if tok.isalpha()]
     return(' '.join(list_tokens))
 
+def process_into_sentences(data_df):
+    sentences = []
+    account_labels = []
+    original_file = []
+    docid = []
+    excerpt_lengths = []
+    excerpt_len_sent_df = []
+
+    for index, row in data_df.iterrows():
+        excerpt = row['Excerpts']
+        excerpt_sentences = sent_tokenize(excerpt)
+        labels = [row['ACCOUNT']] * len(excerpt_sentences)  # add same label for each sentence
+        StoryIDs = [row['StoryID']] * len(excerpt_sentences)  # add same label for each sentence
+        files = [row['file']] * len(excerpt_sentences)  # add same label for each sentence
+        excerpt_lengths.append(len(excerpt_sentences))
+        excerpt_len_sent_df.extend([len(excerpt_sentences)] * len(excerpt_sentences))
+
+        sentences.extend(excerpt_sentences)
+
+        account_labels.extend(labels)
+        original_file.extend(files)
+        docid.extend(StoryIDs)
+
+    sentences_dict = {'file': original_file, 'StoryID': docid,
+                      'Sentences': sentences, 'ACCOUNT': account_labels,
+                      'excerpt_length': excerpt_len_sent_df}
+
+    sentences_df = pd.DataFrame(sentences_dict)
+    return sentences_df
 
 # load data from xlsx
 def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
@@ -50,7 +79,7 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
                                 "data/Orlando - All Excerpts - 7_15_2019.xlsx",
                                 "data/San Bernardino - All Excerpts - 7_15_2019.xlsx",
                                 "data/Vegas - All Excerpts - 7_15_2019.xlsx"],
-                   max_sentences = None):
+                   max_sentences = None, as_sentences = False):
     excerpts = []
     account_labels = []
     original_file = []
@@ -75,16 +104,30 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
         docid.extend(list(data['StoryID']))
 
     short_excerpts = []
+    short_account_labels = []
+    short_original_file = []
+    short_docid = []
     if max_sentences is not None: # filter outlong excerpts
-        for excerpt in excerpts:
+        for idx, excerpt in enumerate(excerpts):
             excerpt_sentences = sent_tokenize(excerpt)
             if len(excerpt_sentences) < max_sentences:
                 short_excerpts.append(excerpt)
+                short_account_labels.append(account_labels[idx])
+                short_original_file.append(original_file[idx])
+                short_docid.append(docid[idx])
+        account_labels = short_account_labels
+        original_file = short_original_file
+        docid = short_docid
         excerpts = short_excerpts
 
+    output_data = pd.DataFrame({'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels})
+    print("num excerpts loaded: "+str(len(excerpts)))
+    print(str(len(account_labels))+str(len(original_file))+str(len(docid)))
 
-    output_data = {'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels}
-    return pd.DataFrame(output_data)
+    if as_sentences:
+        output_data = process_into_sentences(output_data)
+
+    return output_data
 
 # load processed data from csv
 def load_csv_data(file_names = ["data/short_excerpts_df.csv"]):
@@ -292,14 +335,11 @@ def run_classifiers(data_train, data_test, vectorizers_dict, classifiers_dict):
 
     return results
 
-
-def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sentence = False):
+def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sentences = False):
     if 'csv' in str(file_names):
         data = load_csv_data(file_names)
     else:
-        data = load_xlsx_data(file_names, max_sentences=max_sentences)
-        if as_sentence:
-            pass # process excerpts into labelled sentences
+        data = load_xlsx_data(file_names, max_sentences=max_sentences, as_sentences=as_sentences)
 
     vectorizers_dict = gen_tfidf_vectorizers_dict()
     classifiers_dict = gen_classifiers_dict()
@@ -325,9 +365,16 @@ def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sent
 
 
 if __name__ == '__main__':
-    #results = find_best_classifier(["data/short_excerpts_df.csv"])
+
+    # for file_name in os.listdir('data/'):
+    #     if 'xlsx' in str(file_name):
+    #         print("==============================="+file_name+"===============================")
+    #         results = run_classifiers_cv(["data/"+file_name], max_sentences=4)
+    #         results.to_csv(file_name+"_excerpt_tfidf_cv_results.csv")
+
     for file_name in os.listdir('data/'):
         if 'xlsx' in str(file_name):
-            results = run_classifiers_cv(["data/single_sents_df.csv"], max_sentences=4)
-            results.to_csv(file_name+"_tfidf_cv_results.csv")
+            print("==============================="+file_name+"===============================")
+            results = run_classifiers_cv(["data/"+file_name], max_sentences=4, as_sentences=True)
+            results.to_csv(file_name+"_sentences_tfidf_cv_results.csv")
 
