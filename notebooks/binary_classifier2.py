@@ -372,9 +372,17 @@ if __name__ == '__main__':
     #         results = run_classifiers_cv(["data/"+file_name], max_sentences=4)
     #         results.to_csv(file_name+"_excerpt_tfidf_cv_results.csv")
 
+    file_names = []
     for file_name in os.listdir('data/'):
         if 'xlsx' in str(file_name):
+            file_names.append('data/'+file_name)
             print("==============================="+file_name+"===============================")
             results = run_classifiers_cv(["data/"+file_name], max_sentences=4, as_sentences=True)
             results.to_csv(file_name+"_sentences_tfidf_cv_results.csv")
+
+    # run again on all the datasets together
+    results = run_classifiers_cv(file_names, max_sentences=4, as_sentences=False)
+    results.to_csv("fulldata_excerpts_tfidf_cv_results.csv")
+    results = run_classifiers_cv(file_names, max_sentences=4, as_sentences=True)
+    results.to_csv("fulldata_sentences_tfidf_cv_results.csv")
 
