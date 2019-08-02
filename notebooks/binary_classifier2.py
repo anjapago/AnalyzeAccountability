@@ -65,7 +65,7 @@ def process_into_sentences(data_df):
         docid.extend(StoryIDs)
 
     sentences_dict = {'file': original_file, 'StoryID': docid,
-                      'Sentences': sentences, 'ACCOUNT': account_labels,
+                      'Excerpts': sentences, 'ACCOUNT': account_labels,
                       'excerpt_length': excerpt_len_sent_df}
 
     sentences_df = pd.DataFrame(sentences_dict)
