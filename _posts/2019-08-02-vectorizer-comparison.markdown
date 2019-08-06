@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Comparison of Text Tfidf Representations"
-date:   2019-08-01 00:00:30 -0400
+date:   2019-08-02 00:00:30 -0400
 categories: update
 permalink: /:categories/:year/:month/:day/:title.html
 ---
