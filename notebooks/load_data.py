@@ -1,3 +1,6 @@
+import nltk
+nltk.download('punkt')
+
 import random
 import string
 import time
