@@ -18,9 +18,11 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 The following analysis will demonstrate which features contributed the most to the classification decision with various different representations. This can give an indication why some methods may be performing better that others, and also to see if the good performing methods have features that seem to related to the topic of accountability.
 
 ### Unigrams, Balanced
+
 In the case of unigram, and balanced cost function, the features seem like they have some coherence with the topic of accountability, though do contain some event specific terms, such as the name "hornaday", that is most prevalent in a specific set of articles. This indicates that this representation seems like it would not generalize as well to new events.
 
 #### Positive Features
+
 |Weight | Feature|
 ---------|---------|
 |+11.159	| hornaday|
@@ -34,6 +36,7 @@ In the case of unigram, and balanced cost function, the features seem like they 
 
 
 #### Negative Features
+
 |Weight | Feature|
 ---------|---------|
 |-8.918 |	massacred|
@@ -121,7 +124,7 @@ The balanced character based was the best performing representation, though this
 
 For classifiers incorporating 1-3 ngrams, the results are similar to the unbalanced unigram results. This method also did have a fairly good performance in f-score.
 
-##### Positive Features
+#### Positive Features
 
 |Weight? | Feature|
 |--------|--------|
@@ -140,7 +143,7 @@ For classifiers incorporating 1-3 ngrams, the results are similar to the unbalan
 |+8.020	| teens|
 |+7.797	| women|
 
-###### Negative features
+##### Negative features
 
 | Weight |	Feature |
 |--------|----------|
@@ -153,4 +156,4 @@ For classifiers incorporating 1-3 ngrams, the results are similar to the unbalan
 
 ## Conclusions
 
-Methods that have the highest performance in f-score on the current datasets, do not necessarily have the best performance for generalizing to future unseen articles. To assess if the classifiers are capturing something meaningful, feature analysis is vary useful. From this analysis of feature importance, we can see that the highest performing methods: character based and balanced, are not capturing meaningful features specific to accountability. It seems from this analysis that unigrams and tri-grams methods were the capturing best meaning in the features. 
+Methods that have the highest performance in f-score on the current datasets, do not necessarily have the best performance for generalizing to future unseen articles. To assess if the classifiers are capturing something meaningful, feature analysis is vary useful. From this analysis of feature importance, we can see that the highest performing methods: character based and balanced, are not capturing meaningful features specific to accountability. It seems from this analysis that unigrams and tri-grams methods were the capturing best meaning in the features.
