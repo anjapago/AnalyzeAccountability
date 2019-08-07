@@ -15,11 +15,14 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 
 ## Analysis of Features on performance
 
+The following analysis will demonstrate which features contributed the most to the classification decision with various different representations. This can give an indication why some methods may be performing better that others, and also to see if the good performing methods have features that seem to related to the topic of accountability.
+
 ### Unigrams, Balanced
+In the case of unigram, and balanced cost function, the features seem like they have some coherence with the topic of accountability, though do contain some event specific terms, such as the name "hornaday", that is most prevalent in a specific set of articles. This indicates that this representation seems like it would not generalize as well to new events.
 
 #### Positive Features
 |Weight | Feature|
----------|---------
+---------|---------|
 |+11.159	| hornaday|
 |+10.813 | counsellor|
 |+10.489	| bullied|
@@ -32,7 +35,7 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 
 #### Negative Features
 |Weight | Feature|
----------|---------
+---------|---------|
 |-8.918 |	massacred|
 |-9.079	| camera|
 |-9.144	| marquez|
@@ -46,7 +49,11 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 |-11.353	| proposals|
 |-13.895	| caption|
 
-#### Unigrams, Unbalanced
+### Unigrams, Unbalanced
+
+This representation seems to clearly demonstrate meaning related to accountability, with both the terms "blame" and "blamed" in the top most relevant terms to predict as positive for accountability. This may be indicating that despite the slightly higher performance in f-score from the balanced classifier, the unbalanced may actually be giving more meaningful results.
+
+#### Positive Features
 
 | Weight |	Feature |
 |--------|----------|
@@ -69,15 +76,19 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 |+3.622	| counsellor|
 
 #### Negative features
+
 | Weight |	Feature |
 |--------|----------|
-|-3.843	| bmw|
+|-3.843	| bmw |
 |-3.935	| students|
 |-4.184	| caption|
 
 ### Balanced, Character Based
 
+The balanced character based was the best performing representation, though this is perplexing when analyzing the feature importances for the classifier. The features are not easily interpretable, and do not seem to clearly convey meaning.
+
 #### Positive Features
+
 |Weight	| Feature|
 |-------|--------|
 |+19.469	| e? |
@@ -108,6 +119,8 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 
 ### Balanced, Tri-grams
 
+For classifiers incorporating 1-3 ngrams, the results are similar to the unbalanced unigram results. This method also did have a fairly good performance in f-score.
+
 ##### Positive Features
 
 |Weight? | Feature|
@@ -134,6 +147,10 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 | -7.655	| marquez|
 | -7.663	| apple|
 | -7.784	| who was|
-| -7.974	| jaylen fryberg| 
+| -7.974	| jaylen fryberg|
 | -8.451	| yes|
 | -10.954	| caption|
+
+## Conclusions
+
+Methods that have the highest performance in f-score on the current datasets, do not necessarily have the best performance for generalizing to future unseen articles. To assess if the classifiers are capturing something meaningful, feature analysis is vary useful. From this analysis of feature importance, we can see that the highest performing methods: character based and balanced, are not capturing meaningful features specific to accountability. It seems from this analysis that unigrams and tri-grams methods were the capturing best meaning in the features. 
