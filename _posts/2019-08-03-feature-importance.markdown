@@ -143,7 +143,7 @@ For classifiers incorporating 1-3 ngrams, the results are similar to the unbalan
 |+8.020	| teens|
 |+7.797	| women|
 
-##### Negative features
+#### Negative features
 
 | Weight |	Feature |
 |--------|----------|
