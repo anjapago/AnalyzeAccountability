@@ -15,11 +15,10 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 
 ## Analysis of Features on performance
 
-### Balanced vs Unbalanced
+### Unigrams, Balanced
 
-#### Balanced
-
-|Weight? | Feature|
+#### Positive Features
+|Weight | Feature|
 ---------|---------
 |+11.159	| hornaday|
 |+10.813 | counsellor|
@@ -29,8 +28,11 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 |+9.760	| counselor|
 |+9.615	| sprees|
 |+8.979	| science|
-… 2268 more positive …
-… 3276 more negative …
+
+
+#### Negative Features
+|Weight | Feature|
+---------|---------
 |-8.918 |	massacred|
 |-9.079	| camera|
 |-9.144	| marquez|
@@ -44,7 +46,7 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 |-11.353	| proposals|
 |-13.895	| caption|
 
-#### Unbalanced
+#### Unigrams, Unbalanced
 
 | Weight |	Feature |
 |--------|----------|
@@ -65,14 +67,17 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 |+3.686	| illness|
 |+3.664	| failure|
 |+3.622	| counsellor|
-… 2269 more positive …
-… 3275 more negative …
+
+#### Negative features
+| Weight |	Feature |
+|--------|----------|
 |-3.843	| bmw|
 |-3.935	| students|
 |-4.184	| caption|
 
-### Character Based vs Word Based tokens
+### Balanced, Character Based
 
+#### Positive Features
 |Weight	| Feature|
 |-------|--------|
 |+19.469	| e? |
@@ -91,36 +96,44 @@ In the comparison of classifiers, it is clear overall the linear methods perform
 |+11.228	| se. |
 |+11.153	|fame|
 |+10.631	|od. |
-… 45933 more positive …
-… 59739 more negative …
+
+#### Negative Features
+
+| Weight |	Feature |
+|--------|----------|
 |-11.270	| spa|
 |-11.304	| 6 |
 |-12.947	| work |
 |-13.294	| ?" |
 
-### Trigrams vs Unigrams
+### Balanced, Tri-grams
+
+##### Positive Features
 
 |Weight? | Feature|
 |--------|--------|
 |+10.839	| blame|
-+8.991	in other
-+8.746	know this
-+8.640	knew he
-+8.603	jaylen
-+8.571	blamed
-+8.456	motives
-+8.343	culture
-+8.291	believe the
-+8.232	fame
-+8.226	hornaday
-+8.069	he doesn
-+8.020	teens
-+7.797	women
-… 9930 more positive …
-… 17166 more negative …
--7.655	marquez
--7.663	apple
--7.784	who was
--7.974	jaylen fryberg
--8.451	yes
--10.954	caption
+|+8.991	| in other|
+|+8.746	| know this|
+|+8.640	| knew he|
+|+8.603	| jaylen|
+|+8.571	| blamed|
+|+8.456	| motives|
+|+8.343	| culture|
+|+8.291	| believe the|
+|+8.232 |	fame|
+|+8.226	| hornaday|
+|+8.069	| he doesn|
+|+8.020	| teens|
+|+7.797	| women|
+
+###### Negative features
+
+| Weight |	Feature |
+|--------|----------|
+| -7.655	| marquez|
+| -7.663	| apple|
+| -7.784	| who was|
+| -7.974	| jaylen fryberg| 
+| -8.451	| yes|
+| -10.954	| caption|
