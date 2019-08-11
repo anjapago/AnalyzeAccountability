@@ -9,7 +9,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk import FreqDist
 from itertools import compress
-from notebooks import load_data
+import load_data
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -23,7 +23,8 @@ def stem_tokenizer(doc):
 
 
 def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx"],
-                            tokenizer = stem_tokenizer, labels = ['ACCOUNT', 'HERO']):
+                            tokenizer = stem_tokenizer, labels = ['ACCOUNT', 'HERO'],
+                            display = True):
     data = load_data.load_xlsx_data(file_names,
                                     max_sentences = None,
                                     as_sentences = False,
@@ -119,4 +120,12 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
         string_list[idx] = msg
 
     pyLDAvis.save_html(vis_data, 'viz.html')
-    pyLDAvis.display(vis_data)
+    if display:
+        pyLDAvis.display(vis_data)
+    else:
+        return vis_data
+
+if __name__ == '__main__':
+    vis_data = produce_visualization(file_names = ["notebooks/data/Isla Vista - All Excerpts - 1_2_2019.xlsx"],
+                                tokenizer = stem_tokenizer, labels = ['ACCOUNT', 'HERO'],
+                                display = False)
