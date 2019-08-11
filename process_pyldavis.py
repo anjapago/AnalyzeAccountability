@@ -27,7 +27,7 @@ def stem_tokenizer(doc):
 
 def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx"],
                             tokenizer = stem_tokenizer, labels = ['ACCOUNT', 'HERO'],
-                            max_sentences = None, as_sentences = False):
+                            max_sentences = None, as_sentences = False, output_file = 'ldavis'):
     data = load_data.load_xlsx_data(file_names,
                                     max_sentences = max_sentences,
                                     as_sentences = as_sentences,
@@ -68,7 +68,7 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
     i=0
     for coln in main_types_df.columns:
         categ_excerpts = list(compress(main_types_excerpts, main_types_df[coln].values))
-        exq = [stem_tokenizer(doc) for doc in categ_excerpts]
+        exq = [tokenizer(doc) for doc in categ_excerpts]
         excerpt_words = [tok for tok_list in exq for tok in tok_list]
         i=i+1
         topic_size.append(len(exq))
@@ -108,7 +108,7 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
     #print('Doc-Topic shape: %s' % str(np.array(data_dict['doc_topic_dists']).shape))
 
     # save data as json
-    with open('viz.json', 'w') as json_file:
+    with open(output_file+'.json', 'w') as json_file:
         json.dump(data_dict, json_file)
 
     vis_data = pyLDAvis.prepare(**data_dict, n_jobs=-1)
@@ -122,7 +122,7 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
         print(msg)
         string_list[idx] = msg
 
-    pyLDAvis.save_html(vis_data, 'viz.html')
+    pyLDAvis.save_html(vis_data, output_file+'.html')
     #if display:
         #pyLDAvis.display(vis_data)
     return vis_data

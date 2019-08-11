@@ -95,10 +95,15 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
 
         #print(data.columns)
         for label in labels:
-            data_colname = [l for l in data.columns if label.lower() in l.lower()]
+            data_colname = [l for l in data.columns if label.lower() in
+                            "".join("".join(l.lower().split(' ')).split('/'))]
             data_colname = [l for l in data_colname if "_" not in l]
             data_colname = [l for l in data_colname if "\\" not in l]
+            # if 'race' in label.lower():
+            #     # adjusting for special label race/culture
+            #     data_colname = [l for l in data.columns if "race" in l]
             if len(data_colname) ==0:
+                print("no labels of type: "+label)
                 label_list = [0 for l in range(data.shape[0])]
             else:
                 data_label = data_colname[0]
