@@ -27,10 +27,10 @@ def stem_tokenizer(doc):
 
 def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xlsx"],
                             tokenizer = stem_tokenizer, labels = ['ACCOUNT', 'HERO'],
-                            display = True):
+                            max_sentences = None, as_sentences = False):
     data = load_data.load_xlsx_data(file_names,
-                                    max_sentences = None,
-                                    as_sentences = False,
+                                    max_sentences = max_sentences,
+                                    as_sentences = as_sentences,
                                     labels=labels)
 
     excerpts = list(data['Excerpts'])
@@ -58,7 +58,7 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
     fdistmc = fdist.most_common()
     vocab = [word for word, count in fdistmc]
     term_frequency = [count for word, count in fdistmc]
-    print("number of documents: "+str(len(doc_lengths)))
+    print("number of labelled documents: "+str(len(doc_lengths)))
 
     # build topic-term distribution
     stop_words = set(stopwords.words('english'))
@@ -73,7 +73,7 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
         i=i+1
         topic_size.append(len(exq))
         topic_num_words.append(len(excerpt_words))
-        print("Topic "+str(i)+": "+coln+" number of excerpts: "+str(len(exq)))
+        #print("Topic "+str(i)+": "+coln+" number of excerpts: "+str(len(exq)))
         words = [word for word in excerpt_words if word.lower() not in stop_words and word.isalpha()]
         freq_dist_dict[coln] = FreqDist(words)
 
@@ -123,10 +123,9 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
         string_list[idx] = msg
 
     pyLDAvis.save_html(vis_data, 'viz.html')
-    if display:
-        pyLDAvis.display(vis_data)
-    else:
-        return vis_data
+    #if display:
+        #pyLDAvis.display(vis_data)
+    return vis_data
 
 if __name__ == '__main__':
     vis_data = produce_visualization(file_names = ["notebooks/data/Isla Vista - All Excerpts - 1_2_2019.xlsx"],
