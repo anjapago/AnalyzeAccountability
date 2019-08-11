@@ -98,15 +98,18 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
             data_colname = [l for l in data.columns if label.lower() in l.lower()]
             data_colname = [l for l in data_colname if "_" not in l]
             data_colname = [l for l in data_colname if "\\" not in l]
-            data_label = data_colname[0]
-            #print(data_colname)
+            if len(data_colname) ==0:
+                label_list = [0 for l in range(data.shape[0])]
+            else:
+                data_label = data_colname[0]
+                #print(data_colname)
 
-            label_list = [1 if l =="True"  else l for l in data[data_label]]
-            label_list = [0 if l =="False" else l for l in label_list]
-            try:
-                label_list = [int(l) for l in label_list]
-            except:
-                print(data[label])
+                label_list = [1 if l =="True"  else l for l in data[data_label]]
+                label_list = [0 if l =="False" else l for l in label_list]
+                try:
+                    label_list = [int(l) for l in label_list]
+                except:
+                    print(data[label])
             #file_labels.extend(label_list)
             file_labels_dict[label].extend(label_list)
 
@@ -137,8 +140,8 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
         excerpts = short_excerpts
 
     excerpts_dict = {'file':original_file, 'StoryID': docid,'Excerpts': excerpts}
-    print(pd.DataFrame(excerpts_dict).shape)
-    print(pd.DataFrame(file_labels_dict).shape)
+    #print(pd.DataFrame(excerpts_dict).shape)
+    #print(pd.DataFrame(file_labels_dict).shape)
     output_data = pd.DataFrame({**file_labels_dict, **excerpts_dict})
     print("num excerpts loaded: "+str(len(excerpts)))
     #print(str(len(account_labels))+str(len(original_file))+str(len(docid)))
@@ -174,6 +177,13 @@ def load_csv_data(file_names = ["data/short_excerpts_df.csv"]):
     return pd.DataFrame(output_data)
 
 if __name__ == '__main__':
+    labels = ['ACCOUNT', 'HERO', 'GRIEF',
+               'EVENT', 'INVESTIGATION',
+               'JOURNEY', 'LEGAL', 'MEDIA',
+               'MISCELLANEOUS', 'MOURNING',
+               'PERPETRATOR', 'PHOTO', 'POLICY',
+               'RACECULTURE', 'RESOURCES', 'SAFETY',
+               'SOCIALSUPPORT', 'THREAT', 'TRAUMA','VICTIMS']
     data_df = load_xlsx_data(file_names=["data/Isla Vista - All Excerpts - 1_2_2019.xlsx",
                                "data/Marysville - All Excerpts - Final - 1_2_2019.xlsx",
                                "data/Newtown - All Excerpts - 1-2-2019.xlsx",
@@ -181,5 +191,5 @@ if __name__ == '__main__':
                                "data/Orlando - All Excerpts - 7_15_2019.xlsx",
                                "data/San Bernardino - All Excerpts - 7_15_2019.xlsx",
                                "data/Vegas - All Excerpts - 7_15_2019.xlsx"],
-                   max_sentences=5, as_sentences=True, labels = ['ACCOUNT', 'HERO'])
+                   max_sentences=5, as_sentences=True, labels = labels)
     print(data_df)

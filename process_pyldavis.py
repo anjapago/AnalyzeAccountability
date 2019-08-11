@@ -111,7 +111,7 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
     with open('viz.json', 'w') as json_file:
         json.dump(data_dict, json_file)
 
-    vis_data = pyLDAvis.prepare(**data_dict)
+    vis_data = pyLDAvis.prepare(**data_dict, n_jobs=-1)
 
     # order the columns for pyldavis
     col_order = vis_data.topic_order
@@ -128,6 +128,12 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
     return vis_data
 
 if __name__ == '__main__':
+    labels = ['ACCOUNT', 'HERO', 'GRIEF',
+               'EVENT', 'INVESTIGATION',
+               'JOURNEY', 'LEGAL', 'MEDIA',
+               'MISCELLANEOUS', 'MOURNING',
+               'PERPETRATOR', 'PHOTO', 'POLICY',
+               'RACECULTURE', 'RESOURCES', 'SAFETY',
+               'SOCIALSUPPORT', 'THREAT', 'TRAUMA','VICTIMS']
     vis_data = produce_visualization(file_names = ["notebooks/data/Isla Vista - All Excerpts - 1_2_2019.xlsx"],
-                                tokenizer = stem_tokenizer, labels = ['ACCOUNT', 'HERO'],
-                                display = False)
+                                tokenizer = stem_tokenizer, labels = labels)
