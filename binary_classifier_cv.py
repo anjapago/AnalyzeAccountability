@@ -143,7 +143,8 @@ def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sent
     classifiers_dict = gen_classifiers_dict()
 
     cv_results_df = pd.DataFrame(columns = ['cv', 'classifier', 'vectorizer',
-                                            'precision', 'recall', 'fscore', 'label'])
+                                            'precision', 'recall', 'fscore', 'label',
+                                            'num_train_exs', 'num_test_exs'])
 
     random.seed(a=3)
     for c in range(cv):
@@ -153,11 +154,16 @@ def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sent
         data_train, data_test = train_test_split(pd.DataFrame(data),
                                                  test_size=ptest, random_state=rand_int)
         for label in labels:
-            results = run_classifiers(data_train, data_test,
-                                      vectorizers_dict, classifiers_dict,
-                                      label=label)
-            results['cv'] = pd.Series([c]*results.shape[1])
-            cv_results_df = cv_results_df.append(results, ignore_index=True)
+            if sum(data_train[label]) == 0 or sum(data_test[label]) ==0:
+                print("0 examples of label: "+label)
+            else:
+                results = run_classifiers(data_train, data_test,
+                                          vectorizers_dict, classifiers_dict,
+                                          label=label)
+                results['cv'] = pd.Series([c]*results.shape[1])
+                results['num_train_exs'] = pd.Series([data_train[label]] * results.shape[1])
+                results['num_test_exs'] = pd.Series([data_test[label]] * results.shape[1])
+                cv_results_df = cv_results_df.append(results, ignore_index=True)
         end_time = time.time()
         print("Time for cv="+str(c)+" : "+str(end_time-start_time))
 
