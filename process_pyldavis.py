@@ -122,6 +122,10 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
         print(msg)
         string_list[idx] = msg
 
+    with open(output_file+'.txt', 'w') as f:
+        for msg in string_list:
+            f.write("%s\n" % msg)
+
     pyLDAvis.save_html(vis_data, output_file+'.html')
     #if display:
         #pyLDAvis.display(vis_data)
