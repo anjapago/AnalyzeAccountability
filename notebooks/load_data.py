@@ -33,29 +33,35 @@ def process_into_sentences(data_df):
     account_labels = []
     original_file = []
     docid = []
-    excerpt_lengths = []
+    #excerpt_lengths = []
     excerpt_len_sent_df = []
+    columns_dict={}
+    for col in data_df.columns:
+        columns_dict[col] = []
 
     for index, row in data_df.iterrows():
         excerpt = row['Excerpts']
         excerpt_sentences = sent_tokenize(excerpt)
-        labels = [row['ACCOUNT']] * len(excerpt_sentences)  # add same label for each sentence
-        StoryIDs = [row['StoryID']] * len(excerpt_sentences)  # add same label for each sentence
-        files = [row['file']] * len(excerpt_sentences)  # add same label for each sentence
-        excerpt_lengths.append(len(excerpt_sentences))
-        excerpt_len_sent_df.extend([len(excerpt_sentences)] * len(excerpt_sentences))
-
         sentences.extend(excerpt_sentences)
+        columns_dict['Excerpts'].extend(excerpt_sentences)
+        #excerpt_lengths.append(len(excerpt_sentences))
+        excerpt_len_sent_df.extend([len(excerpt_sentences)] * len(excerpt_sentences))
+        # labels = [row['ACCOUNT']] * len(excerpt_sentences)  # add same label for each sentence
+        # StoryIDs = [row['StoryID']] * len(excerpt_sentences)  # add same label for each sentence
+        # files = [row['file']] * len(excerpt_sentences)  # add same label for each sentence
+        # account_labels.extend(labels)
+        # original_file.extend(files)
+        # docid.extend(StoryIDs)
+        for col in data_df.columns:
+            if not col == 'Excerpts':
+                columns_dict[col].extend([row[col]]*len(excerpt_sentences))
 
-        account_labels.extend(labels)
-        original_file.extend(files)
-        docid.extend(StoryIDs)
+    # sentences_dict = {'file': original_file, 'StoryID': docid,
+    #                   'Excerpts': sentences, 'ACCOUNT': account_labels,
+    #                   'excerpt_length': excerpt_len_sent_df}
+    columns_dict['excerpt_length'] = excerpt_len_sent_df
 
-    sentences_dict = {'file': original_file, 'StoryID': docid,
-                      'Excerpts': sentences, 'ACCOUNT': account_labels,
-                      'excerpt_length': excerpt_len_sent_df}
-
-    sentences_df = pd.DataFrame(sentences_dict)
+    sentences_df = pd.DataFrame(columns_dict)
     return sentences_df
 
 # load data from xlsx
@@ -66,11 +72,14 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
                                 "data/Orlando - All Excerpts - 7_15_2019.xlsx",
                                 "data/San Bernardino - All Excerpts - 7_15_2019.xlsx",
                                 "data/Vegas - All Excerpts - 7_15_2019.xlsx"],
-                   max_sentences = None, as_sentences = False):
+                   max_sentences = None, as_sentences = False, labels = ['ACCOUNT']):
     excerpts = []
-    account_labels = []
     original_file = []
     docid = []
+    #file_labels = []
+    file_labels_dict = {}
+    for label in labels:
+        file_labels_dict[label] = []
     for file_name in file_names:
         if 'xlsx' in file_name:
             data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
@@ -83,10 +92,24 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
         ex_col = "".join(ex_col)
 
         excerpts.extend(list(data[ex_col]))
-        labels = [1 if label =="True"  else label for label in data['ACCOUNT']]
-        labels = [0 if label =="False" else label for label in labels]
-        labels = [int(label) for label in labels]
-        account_labels.extend(labels)
+
+        #print(data.columns)
+        for label in labels:
+            data_colname = [l for l in data.columns if label.lower() in l.lower()]
+            data_colname = [l for l in data_colname if "_" not in l]
+            data_colname = [l for l in data_colname if "\\" not in l]
+            data_label = data_colname[0]
+            #print(data_colname)
+
+            label_list = [1 if l =="True"  else l for l in data[data_label]]
+            label_list = [0 if l =="False" else l for l in label_list]
+            try:
+                label_list = [int(l) for l in label_list]
+            except:
+                print(data[label])
+            #file_labels.extend(label_list)
+            file_labels_dict[label].extend(label_list)
+
         original_file.extend([file_name]*len(data[ex_col]))
         docid.extend(list(data['StoryID']))
 
@@ -94,22 +117,29 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
     short_account_labels = []
     short_original_file = []
     short_docid = []
+    short_file_labels_dict = {}
+    for label in labels:
+        short_file_labels_dict[label] = []
     if max_sentences is not None: # filter outlong excerpts
         for idx, excerpt in enumerate(excerpts):
             excerpt_sentences = sent_tokenize(excerpt)
             if len(excerpt_sentences) < max_sentences:
                 short_excerpts.append(excerpt)
-                short_account_labels.append(account_labels[idx])
+                #short_account_labels.append(account_labels[idx])
                 short_original_file.append(original_file[idx])
                 short_docid.append(docid[idx])
-        account_labels = short_account_labels
+                for label in labels:
+                    short_file_labels_dict[label].append(file_labels_dict[label][idx])
+        #account_labels = short_account_labels
+        file_labels_dict = short_file_labels_dict
         original_file = short_original_file
         docid = short_docid
         excerpts = short_excerpts
 
-    output_data = pd.DataFrame({'file':original_file, 'StoryID': docid, 'Excerpts': excerpts, 'ACCOUNT': account_labels})
+    excerpts_dict = {'file':original_file, 'StoryID': docid,'Excerpts': excerpts}
+    output_data = pd.DataFrame({**short_file_labels_dict, **excerpts_dict})
     print("num excerpts loaded: "+str(len(excerpts)))
-    print(str(len(account_labels))+str(len(original_file))+str(len(docid)))
+    #print(str(len(account_labels))+str(len(original_file))+str(len(docid)))
 
     if as_sentences:
         output_data = process_into_sentences(output_data)
@@ -149,4 +179,5 @@ if __name__ == '__main__':
                                "data/Orlando - All Excerpts - 7_15_2019.xlsx",
                                "data/San Bernardino - All Excerpts - 7_15_2019.xlsx",
                                "data/Vegas - All Excerpts - 7_15_2019.xlsx"],
-                   max_sentences=5, as_sentences=True)
+                   max_sentences=5, as_sentences=True, labels = ['ACCOUNT', 'HERO'])
+    print(data_df)
