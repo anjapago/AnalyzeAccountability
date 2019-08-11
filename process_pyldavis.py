@@ -9,7 +9,10 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk import FreqDist
 from itertools import compress
-import load_data
+try:
+    import load_data
+except:
+    from AnalyzeAccountability import load_data
 
 nltk.download('punkt')
 nltk.download('stopwords')
