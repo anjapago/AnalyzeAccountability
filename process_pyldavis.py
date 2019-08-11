@@ -38,7 +38,7 @@ def produce_visualization(file_names = ["Isla Vista - All Excerpts - 1_2_2019.xl
     # exclude labels with no true label
     keep_labels = []
     for lab in labels:
-        if sum(data[labels]) > 0:
+        if sum(data[lab]) > 0:
             keep_labels.append(lab)
         else:
             print(lab+" label not present in files: "+str(file_names))
