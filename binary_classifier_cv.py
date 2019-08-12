@@ -181,20 +181,24 @@ if __name__ == '__main__':
 
     file_names = []
     results_path = 'notebooks/classifier_cv_results/'
-    labels = ['RACECULTURE', 'RESOURCES', 'SAFETY',
+    labels = ['HERO', 'RACECULTURE', 'RESOURCES', 'SAFETY',
               'SOCIALSUPPORT', 'THREAT', 'TRAUMA', 'VICTIMS',
-              'ACCOUNT', 'HERO', 'GRIEF',
+              'ACCOUNT', 'GRIEF',
               'EVENT', 'INVESTIGATION',
               'JOURNEY', 'LEGAL', 'MEDIA',
               'MISCELLANEOUS', 'MOURNING',
               'PERPETRATOR', 'PHOTO', 'POLICY']
     for file_name in os.listdir('notebooks/data/'):
         if 'xlsx' in str(file_name):
-            file_names.append('notebooks/data/'+file_name)
-            print("==============================="+file_name+"===============================")
-            results = run_classifiers_cv(["notebooks/data/"+file_name], max_sentences=4, as_sentences=True,
-                                         labels = labels)
-            results.to_csv(results_path+file_name+"_sentences_tfidf_cv_results_labels.csv")
+            output_filename = file_name + "_sentences_tfidf_cv_results_labels.csv"
+            if output_filename in os.listdir(results_path):
+                print("File: "+output_filename+" already computed.")
+            else:
+                file_names.append('notebooks/data/'+file_name)
+                print("==============================="+file_name+"===============================")
+                results = run_classifiers_cv(["notebooks/data/"+file_name], max_sentences=4, as_sentences=True,
+                                             labels = labels)
+                results.to_csv(results_path+output_filename)
 
     # run again on all the datasets together
     results = run_classifiers_cv(file_names, max_sentences=4, as_sentences=False, labels = labels)
