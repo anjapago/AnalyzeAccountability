@@ -10,16 +10,39 @@ This post is an updated version of the previous post, with the added data from m
 
 The news events included in this visualization are listed in the following list. These events can also be analyzed individually, by clicking the links.
 
-<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Marysville-ldavis.html">
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Marysville-ldavis-5sent.html">
 	Marysville
 </a>
 
-* Charleston
-* Orlando
-* Newtown
-* Vegas
-* San Bernardino
-* Isla Vista
+
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Charleston-ldavis-5sent.html">
+	Charleston
+</a>
+
+
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Orlando-ldavis-5sent.html">
+	Orlando
+</a>
+
+
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Newtown-ldavis-5sent.html">
+	Newtown
+</a>
+
+
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Vegas-ldavis-5sent.html">
+	Vegas
+</a>
+
+
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/San-Bernardino-ldavis-5sent.html">
+	San Bernardino
+</a>
+
+
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Isla-Vista-ldavis-5sent.html">
+	Isla Vista
+</a>
 
 
 ## Text Visualizations Explanation
