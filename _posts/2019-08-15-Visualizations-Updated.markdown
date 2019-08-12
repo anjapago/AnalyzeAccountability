@@ -8,9 +8,12 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 This post is an updated version of the previous post, with the added data from more recent labeled news event excerpts.
 
-The news events included in this visualization are:
+The news events included in this visualization are listed in the following list. These events can also be analyzed individually, by clicking the links.
 
-* Marysville
+<a class="post-link" href="/AnalyzeAccountability/visualization/2019/08/15/Marysville-ldavis.html">
+	Marysville
+</a>
+
 * Charleston
 * Orlando
 * Newtown
@@ -18,33 +21,33 @@ The news events included in this visualization are:
 * San Bernardino
 * Isla Vista
 
+
 ## Text Visualizations Explanation
 
 This file will display visualizations of the text based on the labelled categories, shown as the circles on the distance plot. This plot also shows the word distributions associated with each category. The word distributions on the right show the most common words in each category when lambda=1, and the most specific words to the category when lambda = 0, computed by the relevance metric.
 
 The categories are labelled on the plot as numbers, and the corresponding label titles are:
 
-Topic 1: POLICY, number of words: 404003
-Topic 2: VICTIMS, number of words: 289329
-Topic 3: ACCOUNT, number of words: 322202
-Topic 4: EVENT, number of words: 322761
-Topic 5: SAFETY, number of words: 161804
-Topic 6: MOURNING, number of words: 138191
-Topic 7: PERPETRATOR, number of words: 161611
-Topic 8: GRIEF, number of words: 125064
-Topic 9: TRAUMA, number of words: 122569
-Topic 10: RESOURCES, number of words: 77401
-Topic 11: INVESTIGATION, number of words: 82445
-Topic 12: SOCIALSUPPORT, number of words: 76234
-Topic 13: LEGAL, number of words: 65176
-Topic 14: PHOTO, number of words: 54282
-Topic 15: MEDIA, number of words: 48718
-Topic 16: JOURNEY, number of words: 58741
-Topic 17: THREAT, number of words: 30176
-Topic 18: MISCELLANEOUS, number of words: 23185
-Topic 19: HERO, number of words: 14459
-Topic 20: RACECULTURE, number of words: 8969
-
+		Topic 1: POLICY, number of words: 404003
+		Topic 2: VICTIMS, number of words: 289329
+		Topic 3: ACCOUNT, number of words: 322202
+		Topic 4: EVENT, number of words: 322761
+		Topic 5: SAFETY, number of words: 161804
+		Topic 6: MOURNING, number of words: 138191
+		Topic 7: PERPETRATOR, number of words: 161611
+		Topic 8: GRIEF, number of words: 125064
+		Topic 9: TRAUMA, number of words: 122569
+		Topic 10: RESOURCES, number of words: 77401
+		Topic 11: INVESTIGATION, number of words: 82445
+		Topic 12: SOCIALSUPPORT, number of words: 76234
+		Topic 13: LEGAL, number of words: 65176
+		Topic 14: PHOTO, number of words: 54282
+		Topic 15: MEDIA, number of words: 48718
+		Topic 16: JOURNEY, number of words: 58741
+		Topic 17: THREAT, number of words: 30176
+		Topic 18: MISCELLANEOUS, number of words: 23185
+		Topic 19: HERO, number of words: 14459
+		Topic 20: RACECULTURE, number of words: 8969
 
 The size of the circles correspond to the size of that category. Also, if hovering over a word in the chart on the right, the size of the circles will adjust proportional to count of that word in each category. Clicking on a topic will display that topic word distribution, and clicking away on the empty part of the distance plot will show the overall word distribution of all the documents.
 
