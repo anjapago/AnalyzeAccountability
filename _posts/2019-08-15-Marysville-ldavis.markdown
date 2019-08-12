@@ -6,6 +6,31 @@ categories: visualization
 permalink: /:categories/:year/:month/:day/:title.html
 ---
 
+## Topic Codes
+
+    Topic 1: VICTIMS, number of words: 173575
+    Topic 2: EVENT, number of words: 32302
+    Topic 3: ACCOUNT, number of words: 23341
+    Topic 4: TRAUMA, number of words: 22502
+    Topic 5: SAFETY, number of words: 17114
+    Topic 6: JOURNEY, number of words: 16754
+    Topic 7: PERPETRATOR, number of words: 12640
+    Topic 8: GRIEF, number of words: 9716
+    Topic 9: SOCIALSUPPORT, number of words: 9702
+    Topic 10: INVESTIGATION, number of words: 8495
+    Topic 11: LEGAL, number of words: 8321
+    Topic 12: PHOTO, number of words: 8197
+    Topic 13: MOURNING, number of words: 8115
+    Topic 14: POLICY, number of words: 7542
+    Topic 15: RACECULTURE, number of words: 6474
+    Topic 16: RESOURCES, number of words: 6113
+    Topic 17: HERO, number of words: 5164
+    Topic 18: MEDIA, number of words: 2642
+    Topic 19: MISCELLANEOUS, number of words: 1790
+    Topic 20: THREAT, number of words: 1353
+
+## Visualization
+
 
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.css">
 
