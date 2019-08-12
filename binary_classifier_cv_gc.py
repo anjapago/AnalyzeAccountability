@@ -154,8 +154,8 @@ def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sent
         data_train, data_test = train_test_split(pd.DataFrame(data),
                                                  test_size=ptest, random_state=rand_int)
         for label in labels:
-            if sum(data_train[label]) <= 2 or sum(data_test[label]) <= 2:
-                print("0 examples of label: "+label)
+            if sum(data_train[label]) < 2 or sum(data_test[label]) < 2:
+                print("less than 2 examples of label: "+label)
             elif any(data_train[label] > 1): # needs at least 2 examples?
                 print("given labels invalid: " + label)
             # elif not any(data_train[label] == 1):
