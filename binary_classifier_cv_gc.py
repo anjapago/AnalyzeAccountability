@@ -158,7 +158,11 @@ def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sent
                 print("0 examples of label: "+label)
             elif any(data_train[label] > 1):
                 print("given labels invalid: " + label)
+            elif not any(data_train[label] == 1):
+                print("No labels of class 1 for label: "+label)
+                print(data_train[label])
             else:
+                print("num train exs: "+str(sum(data_train[label])))
                 results = run_classifiers(data_train, data_test,
                                           vectorizers_dict, classifiers_dict,
                                           label=label)
