@@ -162,9 +162,9 @@ def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sent
                 results = run_classifiers(data_train, data_test,
                                           vectorizers_dict, classifiers_dict,
                                           label=label)
-                results['cv'] = pd.Series([c]*results.shape[1])
-                results['num_train_exs'] = pd.Series([sum(data_train[label])] * results.shape[1])
-                results['num_test_exs'] = pd.Series([sum(data_test[label])] * results.shape[1])
+                results['cv'] = pd.Series([c]*results.shape[0])
+                results['num_train_exs'] = pd.Series([sum(data_train[label])] * results.shape[0])
+                results['num_test_exs'] = pd.Series([sum(data_test[label])] * results.shape[0])
                 cv_results_df = cv_results_df.append(results, ignore_index=True)
         end_time = time.time()
         print("Time for cv="+str(c)+" : "+str(end_time-start_time))
