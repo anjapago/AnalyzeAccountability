@@ -156,7 +156,7 @@ def run_classifiers_cv(file_names, ptest=0.2, cv = 3, max_sentences = 4, as_sent
         for label in labels:
             if sum(data_train[label]) == 0 or sum(data_test[label]) ==0:
                 print("0 examples of label: "+label)
-            if any(data_train[label] > 1):
+            elif any(data_train[label] > 1):
                 print("given labels invalid: " + label)
             else:
                 results = run_classifiers(data_train, data_test,
