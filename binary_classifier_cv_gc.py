@@ -192,7 +192,7 @@ if __name__ == '__main__':
               'PERPETRATOR', 'PHOTO', 'POLICY']
     for file_name in os.listdir():
         if 'xlsx' in str(file_name):
-            output_filename = file_name + "_sentences_tfidf_cv_results_labels.csv"
+            output_filename = file_name + "_excerpts_tfidf_cv_results_labels.csv"
             file_names.append(file_name)
             print("==============================="+file_name+"===============================")
             results = run_classifiers_cv([file_name], max_sentences=4, as_sentences=False,
