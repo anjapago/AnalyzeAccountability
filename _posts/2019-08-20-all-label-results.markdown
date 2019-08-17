@@ -7,6 +7,23 @@ permalink: /:categories/:year/:month/:day/:title.html
 ---
 
 ## Results from Each Event Individually
+
+The following two links lead to interactive visualizations of the results for each event individually. The suggested use of the table is to drag "event" to the left column and "label" to the upper bar. Then select a viewing option, such as bar chart, and select to view "list unique values", and then select "fscore". The image below shows how to configure the options on the table to display the results.
+
+![png](/AnalyzeAccountability/assets/barchartfscores.png)
+
+Another view that is interesting is the heatmap, that shades cells of the table darker for better fscores, this can be configured as shown in the image below.
+
+![png](/AnalyzeAccountability/assets/colheatmap.png)
+
+Finally, there is also the option to filter by any event or label as desired, and this can be done as shown in the following two images.
+
+![png](/AnalyzeAccountability/assets/selectevent.png)
+
+![png](/AnalyzeAccountability/assets/selectlabels.png)
+
+To use the interactive visualizations for the events, click the following two links.
+
 <a class="post-link" href="/AnalyzeAccountability/results/2019/08/20/all-label-results-excerpts.html">
 	Excerpt Based Results
 </a>
@@ -16,6 +33,8 @@ permalink: /:categories/:year/:month/:day/:title.html
 </a>
 
 ## Results from Full Data
+
+The results from all events together are shown in the following two sections, with the sentence based results, and the excerpt based results. 
 
 ### Excerpt Based
 
@@ -180,3 +199,5 @@ permalink: /:categories/:year/:month/:day/:title.html
   </tbody>
 </table>
 </div>
+
+### Sentence Based
