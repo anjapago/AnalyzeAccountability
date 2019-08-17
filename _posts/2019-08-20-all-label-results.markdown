@@ -191,8 +191,6 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 ## Sentence Based Results
 
-
-<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
