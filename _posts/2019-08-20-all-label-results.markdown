@@ -9,3 +9,7 @@ permalink: /:categories/:year/:month/:day/:title.html
 <a class="post-link" href="/AnalyzeAccountability/results/2019/08/20/all-label-results-excerpts.html">
 	Excerpt Based Results
 </a>
+
+<a class="post-link" href="/AnalyzeAccountability/results/2019/08/20/all-label-results-excerpts.html">
+	Sentence Based Results
+</a>
