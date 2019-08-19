@@ -95,8 +95,9 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
 
         if data is None:
             print("no xlsx files loaded")
+        else:
+            data = data.dropna(axis=0)
 
-        data = data.dropna(axis=0)
         ex_col = [colname if "excerpt" in colname.lower() else "" for colname in data.columns]
         ex_col = "".join(ex_col)
 
