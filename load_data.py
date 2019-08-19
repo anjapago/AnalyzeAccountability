@@ -82,7 +82,11 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
         file_labels_dict[label] = []
     for file_name in file_names:
         if 'xlsx' in file_name:
-            data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
+            try:
+                data = pd.read_excel(file_name, sheet_name='Dedoose Excerpts Export')
+            except Exception as e:
+                print("failed to load file: "+str(file_name))
+                print(e)
         else:
             print("wrong file type, input xlsx")
             break
@@ -122,7 +126,6 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
         docid.extend(list(data['StoryID']))
 
     short_excerpts = []
-    short_account_labels = []
     short_original_file = []
     short_docid = []
     short_file_labels_dict = {}
@@ -133,12 +136,10 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
             excerpt_sentences = sent_tokenize(excerpt)
             if len(excerpt_sentences) < max_sentences:
                 short_excerpts.append(excerpt)
-                #short_account_labels.append(account_labels[idx])
                 short_original_file.append(original_file[idx])
                 short_docid.append(docid[idx])
                 for label in labels:
                     short_file_labels_dict[label].append(file_labels_dict[label][idx])
-        #account_labels = short_account_labels
         file_labels_dict = short_file_labels_dict
         original_file = short_original_file
         docid = short_docid
