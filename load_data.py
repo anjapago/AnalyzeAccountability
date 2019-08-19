@@ -80,6 +80,8 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
     file_labels_dict = {}
     for label in labels:
         file_labels_dict[label] = []
+    print("file names: "+str(file_names))
+    data = None
     for file_name in file_names:
         if 'xlsx' in file_name:
             try:
@@ -90,6 +92,9 @@ def load_xlsx_data(file_names = ["data/Isla Vista - All Excerpts - 1_2_2019.xlsx
         else:
             print("wrong file type, input xlsx")
             break
+
+        if data is None:
+            print("no xlsx files loaded")
 
         data = data.dropna(axis=0)
         ex_col = [colname if "excerpt" in colname.lower() else "" for colname in data.columns]

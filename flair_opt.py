@@ -127,6 +127,7 @@ if __name__ == '__main__':
         print("existing files are: "+str(os.listdir()))
     file_names = os.listdir(data_path)
     xlsx_files = [file_name for file_name in file_names if 'xlsx' in file_name]
+    print("detected xlsx files: "+str(xlsx_files))
 
     if len(xlsx_files) == 0:
         print("no xlsx files in data folder: "+str(os.listdir(data_path)))
