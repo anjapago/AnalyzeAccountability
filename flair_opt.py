@@ -9,13 +9,15 @@ nltk.download('punkt')
 
 from hyperopt import hp
 from flair.embeddings import *
-from flair.hyperparameter.param_selection import SearchSpace, Parameter
 from sklearn.model_selection import train_test_split
-from flair.hyperparameter.param_selection import TextClassifierParamSelector, OptimizationValue
+from flair.hyperparameter.param_selection import TextClassifierParamSelector, OptimizationValue, SearchSpace, Parameter
+#from param_selection import TextClassifierParamSelector, OptimizationValue, SearchSpace, Parameter
 
-from flair.data import Corpus
+#from flair.data import Corpus
+from data import Corpus
+
 from flair.datasets import CSVClassificationCorpus # requires up to date version of code from github
-from flair.embeddings import WordEmbeddings, FlairEmbeddings, DocumentRNNEmbeddings
+#from datasets import CSVClassificationCorpus
 
 # import custom code to load xlsx files
 import load_data
@@ -160,7 +162,8 @@ if __name__ == '__main__':
 
     # create corpus:
     # column format indicating which columns hold the text and label(s)
-    column_name_map = {3: "text", 4: "label_topic"}
+    #column_name_map = {3: "text", 4: "label_topic"}
+    column_name_map = {4: "text", 1: "label_topic"}
 
     print('creating corpus for flair data: '+str(flair_data_path+flair_file))
     # 1. load corpus containing training, test and dev data and if CSV has a header, you can skip it
@@ -173,9 +176,12 @@ if __name__ == '__main__':
     # 2. create the label dictionary
     print("create label dict")
     label_dict = corpus.make_label_dictionary()
+    #print(label_dict)
+    #print(label_dict.get_items())
 
 
-    # define search space
+    #
+    # # define search space
     print("define search space")
     search_space = SearchSpace()
 
@@ -209,6 +215,6 @@ if __name__ == '__main__':
         training_runs=3,
         optimization_value=OptimizationValue.DEV_SCORE
     )
-
-    # start the optimization
+    #
+    # # start the optimization
     param_selector.optimize(search_space, max_evals=100)
