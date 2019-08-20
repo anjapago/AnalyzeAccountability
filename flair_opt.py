@@ -13,8 +13,8 @@ from sklearn.model_selection import train_test_split
 from flair.hyperparameter.param_selection import TextClassifierParamSelector, OptimizationValue, SearchSpace, Parameter
 #from param_selection import TextClassifierParamSelector, OptimizationValue, SearchSpace, Parameter
 
-#from flair.data import Corpus
-from data import Corpus
+from flair.data import Corpus
+#from data import Corpus
 
 from flair.datasets import CSVClassificationCorpus # requires up to date version of code from github
 #from datasets import CSVClassificationCorpus
