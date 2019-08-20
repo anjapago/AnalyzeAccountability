@@ -20,4 +20,4 @@ From: ubuntu:latest
   export SHELL
 
 %runscript
-    exec python flair_opt.py
+    exec python3 flair_opt.py
