@@ -34,7 +34,7 @@ To use the interactive visualizations for the events, click the following two li
 
 ## Results from Full Data
 
-The results from all events together are shown in the following two sections, with the sentence based results, and the excerpt based results.
+The results from all events together are shown in the following table, with both the sentence based results, and the excerpt based results.
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style  type="text/css" >
@@ -555,4 +555,4 @@ The results from all events together are shown in the following two sections, wi
     </tbody></table>
 </div>
 
-This table identifies which f-scores, precision and recall values were the best, and compares the sentence based and excerpt based results. The colour green indicates good performance and red indicates poor performance. It is nice to see that by far MISCELLANEOUS label had the worst performance. Another thing to note, is that these results show that overall recall does fairly well. This means that the classifiers are performing well at identifying the excerpts as having the correct label. The lower precision indicates that it is returning too many results (i.e. too many false positives). This could be a good thing in this application, since the false positives may actually be true positives due to errors or inconsistencies in the annotations. Also, in this application it may be better to bring to attention more of the results rather than less, since it may be better to identify more cases relevant to the label, as opposed to missing too many of them. 
+This table identifies which f-scores, precision and recall values were the best, and compares the sentence based and excerpt based results. The colour green indicates good performance and red indicates poor performance. It is nice to see that by far MISCELLANEOUS label had the worst performance. Another thing to note, is that these results show that overall recall does fairly well. This means that the classifiers are performing well at identifying the excerpts as having the correct label. The lower precision indicates that it is returning too many results (i.e. too many false positives). This could be a good thing in this application, since the false positives may actually be true positives due to errors or inconsistencies in the annotations. Also, in this application it may be better to bring to attention more of the results rather than less, since it may be better to identify more cases relevant to the label, as opposed to missing too many of them.
