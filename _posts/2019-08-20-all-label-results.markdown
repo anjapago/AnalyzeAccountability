@@ -34,7 +34,7 @@ To use the interactive visualizations for the events, click the following two li
 
 ## Results from Full Data
 
-The results from all events together are shown in the following two sections, with the sentence based results, and the excerpt based results. 
+The results from all events together are shown in the following two sections, with the sentence based results, and the excerpt based results.
 
 ### Excerpt Based
 
@@ -201,3 +201,165 @@ The results from all events together are shown in the following two sections, wi
 </div>
 
 ### Sentence Based
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>label</th>
+      <th>recall</th>
+      <th>precision</th>
+      <th>fscore</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCOUNT</td>
+      <td>0.689390</td>
+      <td>0.520519</td>
+      <td>0.593052</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>EVENT</td>
+      <td>0.788855</td>
+      <td>0.669544</td>
+      <td>0.724264</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GRIEF</td>
+      <td>0.662380</td>
+      <td>0.594215</td>
+      <td>0.626353</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>HERO</td>
+      <td>0.390779</td>
+      <td>0.458261</td>
+      <td>0.421671</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>INVESTIGATION</td>
+      <td>0.645075</td>
+      <td>0.549435</td>
+      <td>0.592606</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>JOURNEY</td>
+      <td>0.527772</td>
+      <td>0.552931</td>
+      <td>0.538554</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>LEGAL</td>
+      <td>0.617024</td>
+      <td>0.517006</td>
+      <td>0.562588</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>MEDIA</td>
+      <td>0.409108</td>
+      <td>0.608507</td>
+      <td>0.488292</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>MISCELLANEOUS</td>
+      <td>0.111955</td>
+      <td>0.316412</td>
+      <td>0.163613</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>MOURNING</td>
+      <td>0.694081</td>
+      <td>0.618216</td>
+      <td>0.653690</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>PERPETRATOR</td>
+      <td>0.625522</td>
+      <td>0.521118</td>
+      <td>0.568497</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>PHOTO</td>
+      <td>0.734191</td>
+      <td>0.903715</td>
+      <td>0.810145</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>POLICY</td>
+      <td>0.768284</td>
+      <td>0.624043</td>
+      <td>0.688665</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>RACECULTURE</td>
+      <td>0.555978</td>
+      <td>0.411426</td>
+      <td>0.472681</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>RESOURCES</td>
+      <td>0.561214</td>
+      <td>0.664053</td>
+      <td>0.607568</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>SAFETY</td>
+      <td>0.658571</td>
+      <td>0.598168</td>
+      <td>0.626388</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>SOCIALSUPPORT</td>
+      <td>0.462509</td>
+      <td>0.498682</td>
+      <td>0.479476</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>THREAT</td>
+      <td>0.378187</td>
+      <td>0.509968</td>
+      <td>0.433208</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>TRAUMA</td>
+      <td>0.629151</td>
+      <td>0.494055</td>
+      <td>0.552743</td>
+    </tr>
+  </tbody>
+</table>
+</div>
