@@ -6,10 +6,16 @@ categories: update
 permalink: /:categories/:year/:month/:day/:title.html
 ---
 
-This post will describe the flair library and the approaches used.
+This post will describe the flair library and the approaches used. The classification task focussed on in these experiments is the original task of binary classification of accountability. Also, it will be applied on the sentence level (instead of the excerpt level). See previous posts for explanation of this dataset and task.
 
 ## Flair Library
+[Flair](https://github.com/zalandoresearch/flair) is an open source library for natural language processing created by Zalando research. Flair is *"a very simple framework for state-of-the-art natural language processing (NLP)"*. The main benefit of this library is that it makes it easy to implement and experiment with many state of the art methods within the same framework, in particular experiments with different text representations (embeddings).  
 
+For additional resources explaining flair, please view:
+- [overview](https://www.analyticsvidhya.com/blog/2019/02/flair-nlp-library-python/)
+- [text classification](https://towardsdatascience.com/text-classification-with-state-of-the-art-nlp-library-flair-b541d7add21f)
+- [tutorials](https://github.com/zalandoresearch/flair/blob/master/resources/docs/TUTORIAL_7_TRAINING_A_MODEL.md)
+- [presentation by zalando](http://alanakbik.github.io/talks/ML_Meetup_2018.pdf)
 
 ## Testing Flair Word Embeddings and Document Embeddings
 
@@ -118,3 +124,6 @@ The following show the results from each evaluation run. Each evaluation run wou
     variance: 4.325925925926223e-07
     test_score: 0.6041
     ----------------------------------------------------------------------------------------------------
+
+
+To produce these results, the code was run in an HPC, using a singularity container. The singularity recipe can be found in the [github](https://github.com/anjapago/AnalyzeAccountability/blob/master/singularity/Singularity).
