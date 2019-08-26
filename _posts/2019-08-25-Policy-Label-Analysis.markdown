@@ -135,7 +135,7 @@ The implementations of the codes used to produce these results are: [Bert](https
 | Other      | 1/0.5 | 0.73/0.63 | 108 |
 | Practice     | 0.75/0.15 | 0.71/0.5 | 67 |
 | Info Sharing | 0.9/0.9 | 0.89/0.8 | 51 |
-| VictimAdv      | 0/0 | 0.67/0.18 | 51 |
+| VictimAdv    | 0/0 | 0.67/0.18 | 51 |
 | Immigration   | 0/0 |  0/0 | 12 |
 
 ### Discussion
@@ -154,4 +154,4 @@ Based on this analysis, next steps I would take would be to focus on the sub-typ
 
 The Guns topic is the most reliable and for future studies, this classifier could likely be used to identify excerpts discussing the topic of policy-guns.
 
-Note, I did try [multi-label classification with bert](https://github.com/anjapago/AnalyzeAccountability/blob/master/multi_label_classification_bert_policy.ipynb) as well, but the results turned out to be strange, with each sub-topic getting almost exactly 0.5 in f-score. I would proceed with the pytorch bert implementation (instead of this code) for future testing. 
+Note, I did try [multi-label classification with bert](https://github.com/anjapago/AnalyzeAccountability/blob/master/multi_label_classification_bert_policy.ipynb) as well, but the results turned out to be strange, with each sub-topic getting almost exactly 0.5 in f-score. I would proceed with the pytorch bert implementation (instead of this code) for future testing.
