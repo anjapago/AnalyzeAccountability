@@ -152,4 +152,6 @@ Finally, another big surprise is that the second biggest category "otherAdv" per
 
 Based on this analysis, next steps I would take would be to focus on the sub-type categories that have the most labels, as well as the co-occurence sub type labels, and create a new set of labels: Guns, Mental Health, Guns+OtherAdv, Guns+MentalHealth, and Other. This would result in 5 reasonably similar size sub-topics of Policy. Then, I would proceed with a multi-class classification testing (as opposed to testing one at a time in binary classification as I have done in this experiment).
 
-The Guns topic is the most reliable and for future studies, this classifier could likely be used to identify excerpts discussing the topic of policy-guns. 
+The Guns topic is the most reliable and for future studies, this classifier could likely be used to identify excerpts discussing the topic of policy-guns.
+
+Note, I did try [multi-label classification with bert](https://github.com/anjapago/AnalyzeAccountability/blob/master/multi_label_classification_bert_policy.ipynb) as well, but the results turned out to be strange, with each sub-topic getting almost exactly 0.5 in f-score. I would proceed with the pytorch bert implementation (instead of this code) for future testing. 
