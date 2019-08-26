@@ -137,3 +137,19 @@ The implementations of the codes used to produce these results are: [Bert](https
 | Info Sharing | 0.9/0.9 | 0.89/0.8 | 51 |
 | VictimAdv      | 0/0 | 0.67/0.18 | 51 |
 | Immigration   | 0/0 |  0/0 | 12 |
+
+### Discussion
+
+These results show that guns is abnormally high in performance for both bert and logistic regression. This topic has the most number of examples, so its performance should be higher than the others, but it is quite unexpected to be this high. The most likely explanation, is that there may be repeated data in the test and train set, and so further investigation of the data will be required to confirm this. An alternative explanation could be that all the excerpts with the topic "gun" contains the word gun, and all the excerpts in this dataset that do not have the word gun were also not given that label.
+
+The next best performing topic was Info sharing with the logistic regression classifier. This is likely due to luck, because considering there were only 51 labelled documents with that topic, the test set would've had less than 10 examples. This is not a large enough sample size to consider this score as a conclusive result. However, it can tell us that this topic likely has some very strongly related terms that allowed the classifier to perform well in this data set. If these terms generalize well to unseen data, then this topic could be worthwhile to pursue for future research.
+
+Next, mental health performed quite well with both bert and logistic regression. The size of data is large enough to give more insight that this classifer may be able to generalize well on unseen data.
+
+Finally, another big surprise is that the second biggest category "otherAdv" performed very badly with BERT, but very well with logistic regression. The issue with the bert classifier could be that the training data given happened to be very niche, and so the classifier did not generalize to perform on the test set (over-fitting). More investigation and experimentation with Bert model parameters would be required to address this issue.
+
+## Suggestions for Next Steps
+
+Based on this analysis, next steps I would take would be to focus on the sub-type categories that have the most labels, as well as the co-occurence sub type labels, and create a new set of labels: Guns, Mental Health, Guns+OtherAdv, Guns+MentalHealth, and Other. This would result in 5 reasonably similar size sub-topics of Policy. Then, I would proceed with a multi-class classification testing (as opposed to testing one at a time in binary classification as I have done in this experiment).
+
+The Guns topic is the most reliable and for future studies, this classifier could likely be used to identify excerpts discussing the topic of policy-guns. 
