@@ -1,0 +1,70 @@
+---
+layout: post
+title:  "Recap"
+date:   2019-08-25 00:00:30 -0400
+categories: update
+permalink: /:categories/:year/:month/:day/:title.html
+---
+
+This post will recap in a quick summary what was accomplished during the summer working on this project with RedHen and Dr. Glik's research team at UCLA. The main accomplishments are analysis of the data from various angles, as well as performance results from various classification approaches.
+
+## Data Visualizations and Analysis
+The first objective was to provide some insights into the data to researchers about what they have captured with their annotations. The visualizations and analysis includes:
+
+1. visualizations of the text content of each topic
+2. analysis of the labels for classification (class balances)
+3. analysis of lengths of labelled text, to assess transitioning from excerpt based to sentence based labelled texts
+4. demonstrating effects of text representation on the meaning being captured, for purposes of providing insight to researchers
+
+These four topics was discussed in several posts, shown in the following sections  
+
+### Text Visualizations
+
+* [Isla Vista Visualizations](https://anjapago.github.io/AnalyzeAccountability/update/2019/05/21/Visualizations.html)
+* [Full Dataset Visualizations with all 7 events](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/15/Visualizations-Updated.html)
+
+### Label Analysis
+
+* [Analyzing class balance and co-occurrences of labels](https://anjapago.github.io/AnalyzeAccountability/update/2019/06/12/analyze-labels.html)
+
+### Excerpts to Sentences Analysis
+
+* [Assessing lengths of documents for excerpt to sentence transition](https://anjapago.github.io/AnalyzeAccountability/update/2019/07/06/excerpt-lengths.html)
+
+### Interpreting Text Representation
+
+* [Interpreting text representations](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/02/vectorizer-comparison.html)
+
+## Classification results
+
+Several variations of classifications were tried. Sklearn classifiers were tested in a big experiment. Each classifier was tested with 9 different text representation methods. The state of the art method called Bert, pre-trained model was also used and fined tuned for this classification task. Finally a big optimization experiment was run using the flair library, to test various word and document embeddings. Classifiers were tested primarily on the accountability label, but all the main labels were also tested individually. The classifiers were trained on the original excerpts, and also on labelled sentences. Finally, the results were assess using all 7 datasets together, as well as each dataset alone. There are many posts summarizing these results, listed in the following sections.
+
+The main findings were that advanced methods such as Bert and Flair were not able to outperform the baseline sklearn classification methods. The overall fscore were comparable to the human inter-annotator agreement. While the scores were not very high, they were comparable with the range of human agreement.
+
+Conclusions from overall results were that the excerpt based form of the data typically outperformed the sentence based, and so further investigation of grouped sentence methods should be considered, for example, a sliding window approach. The reason for this is most likely that the meaning being captured by these annotations is not preserved in the single sentence form, or breaking up the excerpts is introducing more noise into the labels.
+
+Another main conclusion is that some events perform dramatically different for classification success for different topics, and one of the main challenges of this task is that the given labels may not generalize well across different events.
+
+### Sklearn Classifiers and Vectorizers
+
+* [Exerpt based, accountability classifier](https://anjapago.github.io/AnalyzeAccountability/update/2019/05/21/Visualizations.html)
+* [Sentence based, accountability classifier](https://anjapago.github.io/AnalyzeAccountability/update/2019/07/10/sentence-classifier.html)
+* [Sentences and Excerpts, all main label types](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/20/all-label-results.html)
+* [Sentence based, classifier and analysis of Policy sub-labels](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/policy-label-analysis2.html)
+
+### Bert Classifiers
+
+* [Bert classifier, accountability label](https://anjapago.github.io/AnalyzeAccountability/update/2019/07/11/sentence-classifier-BERT.html)
+* [Policy sub-label classifier with Bert](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/policy-label-analysis2.html)
+
+### Flair Classifier
+
+* [flair classifier experiments summary](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/classification-with-flair.html)
+* [set up for running flair experiment](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/setting-up-singularity.html)
+
+### Individual Event Comparisons
+
+* [Comprehensive results of performance comparisons for each label on each event](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/20/all-label-results.html)
+
+
+## Suggestions for Future Work

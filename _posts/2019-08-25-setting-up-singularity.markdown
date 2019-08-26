@@ -9,9 +9,9 @@ permalink: /:categories/:year/:month/:day/:title.html
 This post will describe the process I used to run singularity in an HPC. The objective was to run an optimization for text classification using hyperopt and flair. The singularity recipe can be found in the [github](https://github.com/anjapago/AnalyzeAccountability/blob/master/singularity/Singularity).
 
 ## Creating the recipe and Singularity Hub
-The created recipe can be found in the [github(https://github.com/anjapago/AnalyzeAccountability/blob/master/singularity/Singularity). The starting point for this recipe was from [Frederick Michaud](https://singularity-hub.org/collections/1851). Having a singularity file in my github results in automatic builds to be triggered in singularity hub. My singularity hub can be found [here](https://singularity-hub.org/collections/3129).
+The created recipe can be found in the [github](https://github.com/anjapago/AnalyzeAccountability/blob/master/singularity/Singularity). The starting point for this recipe was from [Frederick Michaud](https://singularity-hub.org/collections/1851). Having a singularity file in my github results in automatic builds to be triggered in singularity hub. My singularity hub can be found [here](https://singularity-hub.org/collections/3129).
 
-One challenge in this process was that 1) singularity will only build 10 builds per day, and 2) the build procedure is quite slow. The results in taking quite a long time to figure out and resolve errors in the singularity recipes. Looking through my commits, the types of errors that arose can be seen. Getting the flair installed properly required several iterations of recipes. One tricky error was fixing a utf-8 error that never showed up when running the code on my mac. This error was actually inside the flair library code, so I made some changes in my fork of flair to fix this, and so it is my fork of the flair library being used in this singularity container.
+One challenge in this process was that 1) singularity will only build 10 builds per day, and 2) the build procedure is quite slow. This results in taking quite a long time to figure out and resolve errors in the singularity recipes. Looking through my commits, the types of errors that arose can be seen. Getting the flair installed properly required several iterations of recipes. One tricky error was fixing a utf-8 error that never showed up when running the code on my mac. This error was actually inside the flair library code, so I made some changes in my fork of flair to fix this, and so it is my fork of the flair library being used in this singularity container.
 
 ## Running in HPC
 To run in the HPC, the procedure I followed is listed below:
@@ -41,7 +41,7 @@ Any print statements or logs will be output into a file 'nohup.out'. This file c
 ```sh
 tail nohup.out
 ```
-Which will show the most recent few lines of the logs. 
+Which will show the most recent few lines of the logs.
 
 ## Resources
 
