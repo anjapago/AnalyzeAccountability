@@ -6,9 +6,15 @@ categories: update
 permalink: /:categories/:year/:month/:day/:title.html
 ---
 
-This post is an updated version of the previous post, with the added data from more recent labeled news event excerpts. Also, this visualization contains only the excerpts of 5 sentences or less to keep the document sizes consistent.
+This post will analyze the policy label. This label is of particular interest to the researchers, so the sub-types of this label will be analyzed.
 
+The sub-types of the policy label are: ['OtherAdv', 'VictimAdv', 'Guns','InfoSharing', 'MentalHealth', 'Other', 'Practice', 'Immigration']
 
+These labels will be analyzed in the following ways:
+
+* **Text Visualizations:** visualizations will give an idea of the content of each topic based on the words in the texts of the excerpts, as well as how similar are these subtopics, with a 2d representation visualization using dimension reduction
+* **Label Counts and Label Co-Occurrences:** Graphs will show the break down of the number of labels of each type used in the test and the train, and the number of excerpts with multiple policy sub-labels.
+* **Performance in Classification:** results from classification with simple methods and Bert will be shown
 
 ## Text Visualizations
 
