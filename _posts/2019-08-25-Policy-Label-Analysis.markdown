@@ -75,6 +75,24 @@ if(typeof(LDAvis) !== "undefined"){
 }
 </script>
 
-## Label and Co-Occurrence Counts
+## Label Counts and Multi-Label Co-Occurrence Counts
+
+### Label counts
+
+First we can examine directly the total counts of each sub-label in the both the testing set. These plots simply re-iterate what was shown by the size of the bubbles in teh previous plot.
+
+![label_proportions](/AnalyzeAccountability/assets/policylabelcounts.png)
+
+It is clear guns and otherAdv labels are the most common.
+
+### Label and Co-Occurrence Counts
+
+This section will give more details on the counts of each label in the test and training set.
+
+This can give insights about which labels are most common, and also which labels occur most commonly together. There are seven sub-labels of accountability, so theoretically, it if each label was independant, there would be a possible 2^7 combinations of labels present in the data.
+
+Most likely, certain labels are most likely to co-occur. By co-occur, I mean the same excerpt has been given two labels. For example, if one exerpt was labelled with both mental health and guns, then those two labels have one co-occurence counts.
+
+Computing the co-occurences is displayed in the following plot. The first thing to note, is that there are no excerpts with more than three labels co-occuring. They predominantly have either one or two labels per excerpt. There is a significant number of excerpts with two labels. This indicates that the dataset predominantly has the labels guns and mental health, and the co-occurences of "OtherAdv+Guns", and "MentalHealth+Guns". These two co-occurences of labels have more excerpts than most of the labels indiviually or any of the other co-occurence counts.
 
 {% include plotlystackedcounts.html %}
