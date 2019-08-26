@@ -74,3 +74,7 @@ if(typeof(LDAvis) !== "undefined"){
          });
 }
 </script>
+
+## Label and Co-Occurrence Counts
+
+{% include plotlystackedcounts.html %}
