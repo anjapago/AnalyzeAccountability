@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Classification with Flair"
-date:   2019-07-11 00:00:30 -0400
+date:   2019-08-25 00:00:30 -0400
 categories: update
 permalink: /:categories/:year/:month/:day/:title.html
 ---
@@ -19,6 +19,10 @@ For additional resources explaining flair, please view:
 
 ## Testing Flair Word Embeddings and Document Embeddings
 
+Simple experiments were implemented in the [notebook in github]
+(https://github.com/anjapago/AnalyzeAccountability/blob/master/flair_analysis.ipynb).
+
+The first simple approach tested was document pooling and standard glove embeddings. I also tested the recommended settings of glove embeddings stacked with the flair forward and backward embeddings, and I also experimented with the document RNN and LSTM. None of the results showed a noticeable improvement in fscore. 
 
 ## Optimization Experiment
 
