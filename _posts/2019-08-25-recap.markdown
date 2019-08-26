@@ -79,3 +79,19 @@ One objective of this research task, was to assess the prospect of automating th
 This worked reasonably well, however there was a noticeable drop in performance in transitioning from the excerpt level to the sentence level performance. This effect could be further investigate by training seperate classifiers on varying excerpt lengths. For example, break excerpts up into 1 sentence, 2 sentences, 3 sentences and 4 sentences. After comparing the performance at each fixed length, the best resulting classifier could be used to identify the topics within articles in a sliding window approach.
 
 This experiment is a worthwhile next step, and could also provide insights to other researchers in the social sciences. Excerpts are typically seen as "meaning units", and the excerpt-level annotation scheme is very common in this field of research. For further details, see articles: [Systematic text condensation](https://pdfs.semanticscholar.org/1735/fab29ac548b150286eb84e85cb0305861a18.pdf), [A hands-on guide to doing content analysis](https://www.sciencedirect.com/science/article/pii/S2211419X17300423), [An Introduction to Codes and Coding](https://www.sagepub.com/sites/default/files/upm-binaries/24614_01_Saldana_Ch_01.pdf).
+
+### Testing More Text Representations
+
+As mentioned in the flair section, a systematic experiment was run to optimize the classifier, including choice of text representation method. This experiment could be run more extensively to be more thorough, including testing more  combinations of stacked embeddings. Also, another state of the art library ["pytorch-transformers"](https://github.com/huggingface/pytorch-transformers) could be used, with models implemented in pytorch.
+
+Also, to determine why the state-of-the-art deep learning methods are not out-performing the baseline methods, machine learning interpretability methods should be used, such as the ["What-if Tool"](https://pair-code.github.io/what-if-tool/).
+
+### Removing Training Samples detrimental to classifiers
+
+As shown in previous posts, some subset of the data (particular events) perform much worse on particular topics. For example Isla Vista performed very well in the topic "race/culture", while Orlando performed quite poorly. Perhaps, removing the Orlando dataset from testing and training could boost the performance overall for the other events.
+
+Another way to determine which training examples are detrimental to performance, is to detect these examples automatically using data cleaning methods. One promising method to try is called ["Data Shapely"](https://arxiv.org/abs/1904.02868), which uses the principles of shap and shapely values (used in game theory and more recently in feature importance analysis), to determine the impact of training examples on model errors. Then, using a threshold, the most detrimental examples could be excluded from the dataset before training.
+
+## Conclusions on Experience
+
+This project has been a good learning experience for me, covering all the main areas of data science including many different type of visualizations and training and testing many different types of models. This has been a good opportunity to experiment with many different natural language processing techniques I have been interested to work with. I am grateful to RedHen, Google Summer of Code and Dr. Glik's research group for providing this project. 
