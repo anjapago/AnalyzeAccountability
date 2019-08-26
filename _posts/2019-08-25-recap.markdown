@@ -59,8 +59,8 @@ Another main conclusion is that some events perform dramatically different for c
 
 ### Flair Classifier
 
-* [flair classifier experiments summary](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/classification-with-flair.html)
-* [set up for running flair experiment](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/setting-up-singularity.html)
+* [Flair classifier experiments summary](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/classification-with-flair.html)
+* [Set up for running flair experiment](https://anjapago.github.io/AnalyzeAccountability/update/2019/08/25/setting-up-singularity.html)
 
 ### Individual Event Comparisons
 
