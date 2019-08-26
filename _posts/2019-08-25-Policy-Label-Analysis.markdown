@@ -96,3 +96,44 @@ Most likely, certain labels are most likely to co-occur. By co-occur, I mean the
 Computing the co-occurences is displayed in the following plot. The first thing to note, is that there are no excerpts with more than three labels co-occuring. They predominantly have either one or two labels per excerpt. There is a significant number of excerpts with two labels. This indicates that the dataset predominantly has the labels guns and mental health, and the co-occurences of "OtherAdv+Guns", and "MentalHealth+Guns". These two co-occurences of labels have more excerpts than most of the labels indiviually or any of the other co-occurence counts.
 
 {% include plotlystackedcounts.html %}
+
+Note: it is possible to drag a rectangle around an area of interest on the plot to zoom into it. For example, a zoomed in view of the most common label and label co-occurrence counts is:
+
+![plotlyzoom](/AnalyzeAccountability/assets/newplot.png)
+
+## Classification results
+
+Two classifiers were tested and trained with the sub-type labels.
+Bert, as explained in previous posts, is state of the art in nlp. It should drastically out-perform the logistic regression baseline in situations where the given labels are capturing meaningful content that goes beyond word counts. The reasons for comparable performance between Bert and logistic regression are:
+
+1. noise in the giving labels results in upper bound of inter-annotator agreement (typically ranging from 0.6-0.8 for this dataset)
+2. topics are distinctly identifiable by simple word counts methods, and do not require the encoded meaning present in the pre-trained bert network
+3. Bert is not using optimal parameters, and more testing should be done to improve its performance. Updated methods building on Bert, such as [Roberta](https://ai.facebook.com/blog/roberta-an-optimized-method-for-pretraining-self-supervised-nlp-systems/), could be used.
+
+The implementations of the codes used to produce these results are: [Bert](https://github.com/anjapago/AnalyzeAccountability/blob/master/Classifier_with_BERT_Policy2.ipynb), [logistic regression](https://github.com/anjapago/AnalyzeAccountability/blob/master/notebooks/Policy%20Labels%20Analysis.ipynb).
+
+
+### Fscores
+
+| Label        | Bert   | Logistic Regression | Number Excerpts |
+| ------------ | ------:| -------------------:| ---------------:|
+| Guns      | 0.96 | 0.96 | 742 |
+| OtherAdv     | 0 | 0.67 | 425 |
+| Mental Health | 0.78 | 0.77 | 233 |
+| Other      | 0.67 | 0.68 | 108 |
+| Practice     | 0.25 | 0.59 | 67 |
+| Info Sharing | 0.9 | 0.84 | 51 |
+| VictimAdv      | 0 | 0.29 | 51 |
+| Immigration   | 0 |  0 | 12 |
+
+### Precision/Recall
+| Label        | Bert   | Logistic Regression | Number Excerpts |
+| ------------ | ------:| -------------------:| ---------------:|
+| Guns      | 0.97/0.95 | 0.96/0.96 | 742 |
+| OtherAdv     | 0/0 |   0.64/0.70 | 425 |
+| Mental Health | 0.79/0.76 | 0.87/0.69 | 233 |
+| Other      | 1/0.5 | 0.73/0.63 | 108 |
+| Practice     | 0.75/0.15 | 0.71/0.5 | 67 |
+| Info Sharing | 0.9/0.9 | 0.89/0.8 | 51 |
+| VictimAdv      | 0/0 | 0.67/0.18 | 51 |
+| Immigration   | 0/0 |  0/0 | 12 |
