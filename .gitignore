@@ -4,6 +4,25 @@ tpot_checkpoints/
 tpot_checkpoints2/
 *.xlsx
 
+*.html
+*.json
+*.csv
+tpot/*
+*.png
+*.txt
+*.tsv
+*.zip
+*.cfg
+notebooks/gsocflair/bin/*
+notebooks/gsocflair/include/*
+.idea/*
+*.out
+*.index
+*.meta
+*.icloud
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
